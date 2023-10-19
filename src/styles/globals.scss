@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Quicksand:wght@400;500;700&family=Roboto:wght@400;500&display=swap');
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #ECE5E5;
+  --red: #C31C5A;
+  --blue: #4267B2;
+}
+
+button{
+  cursor: pointer;
+}
+
+a{
+  text-decoration: none;
+}
+
+body{
+  background: var(--white);
+  font-family: 'Quicksand', sans-serif;
+}
