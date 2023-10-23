@@ -1,0 +1,41 @@
+.headerContainer {
+    height: 5rem;   
+}
+
+.headerContent {
+    max-width: 1120px;
+    height: 5rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+    margin-top: 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    img{
+        cursor: pointer;
+    }
+
+}
+
+.navMenu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    
+    p{
+        color: var(--dark-blue);
+        padding: 0 0.5rem;
+        display: inline-block;
+        position: relative;
+        transition: all 0.3s ease;
+        font-size: 1.2rem;
+        font-weight: 600;
+
+        &:hover{
+            color: var(--other-red);
+            border-bottom: 1px solid var(--other-red);
+        }
+    }
+}

@@ -19,4 +19,20 @@
     &:hover{
         opacity: 0.8;
     }
+
+    &:disabled{
+        cursor: not-allowed;
+        svg{
+            animation: animate 2s infinite;
+        }
+    }
+}
+
+@keyframes animate {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
 }

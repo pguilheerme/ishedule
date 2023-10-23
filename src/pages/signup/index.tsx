@@ -3,13 +3,16 @@ import Image from 'next/image'
 import { Button } from '@/components/Ui/button'
 import styles from '@/styles/Home.module.scss'
 import { Input } from '@/components/Ui/input'
-import { useState } from 'react'
+import { useState, FormEvent, useContext } from 'react'
 import Link from 'next/link'
 import LoginImg from '../../../public/loginImg.svg'
 import googleIconImg from '../../../public/googleIconImg.svg'
 import facebookIconImg from '../../../public/facebookIconImg.svg'
+import { toast } from 'react-toastify'
+import { AuthContext } from '@/contexts/AuthContext'
 
 export default function SignUp() {
+    const { signUp } = useContext(AuthContext)
     const [form, setForm] = useState({
         name: '',
         username: '',
@@ -19,6 +22,31 @@ export default function SignUp() {
     const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+    async function handleSignUp(event: FormEvent){
+        event.preventDefault()
+
+        if(form.name === '' || form.username === '' || form.password === '' || form.confirmPassword === ''){
+            toast.warning("Preencha todos os campos")
+            return
+        }
+
+        if (form.confirmPassword !== form.password){
+            toast.error("Erro ao cadastrar!")
+            return
+        }
+
+        setLoading(true)
+
+        let data = {
+            ...form,
+            name: form.name,
+            userName: form.username,
+            password: form.password
+        }
+
+        await signUp(data)
+    }
 
     return (
         <>
@@ -34,7 +62,7 @@ export default function SignUp() {
                 </aside>
                 <div className={styles.containerContent}>
                     <h2>Cadastrar</h2>
-                    <form>
+                    <form onSubmit={handleSignUp}>
                         <label>Nome</label>
                         <Input
                             withEye={false}
