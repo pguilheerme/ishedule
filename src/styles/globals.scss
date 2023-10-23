@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Quicksand:wght@400;500;700&family=Roboto:wght@400;500&display=swap');
 
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
 }
 
 :root {
-  --white: #ECE5E5;
+  --white: #F3F0F0;
+  --gray: #ECE5E5;
   --red: #C31C5A;
   --blue: #4267B2;
 
@@ -16,15 +18,75 @@
   --other-red: #E83F5B;
 }
 
-button{
+button {
   cursor: pointer;
+  all: inherit;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
-body{
+body {
   background: var(--white);
+}
+
+.css-knqc4i-MuiDialogActions-root {
+  display: none !important;
+}
+
+.MuiPickersLayout-root {
+  border-radius: 8px 8px 0px 0px;
+  filter: drop-shadow(16px 4px 8px rgba(0, 0, 0, 0.08));
+}
+
+.css-1eurbeq-MuiPickersToolbar-root-MuiDatePickerToolbar-root {
+  background: var(--other-red);
+  color: var(--white);
+}
+
+.css-1t0788u-MuiPickersSlideTransition-root-MuiDayCalendar-slideTransition{
+  font-weight: bold !important;
+}
+
+.MuiTypography-root {
   font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+}
+
+.css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title {
+  font-size: 2rem;
+}
+
+.css-1u23akw-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background: var(--other-red) !important;
+}
+.css-jgls56-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+  background: var(--other-red) !important;
+
+}
+
+.css-jgls56-MuiButtonBase-root-MuiPickersDay-root.Mui-selected:hover {
+  background: var(--other-red) !important;
+}
+
+ .css-nk89i7-MuiPickersCalendarHeader-root{
+  display: none !important;
+}
+
+.css-1t0788u-MuiPickersSlideTransition-root-MuiDayCalendar-slideTransition{
+  min-height: 200px !important;
+}
+
+.css-1hbyad5-MuiTypography-root {
+  display: none !important;
+
+}
+
+.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel{
+  font-weight: bold !important;
+}
+
+.css-1q04gal-MuiDateCalendar-root{
+  height: auto;
 }

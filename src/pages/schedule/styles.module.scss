@@ -1,0 +1,75 @@
+.containerCenter{
+    display: flex;
+    width: 70vw;
+    margin: 3.5rem auto !important;
+    justify-content: space-evenly;
+    
+    
+
+    .containerScheduleLeft{
+        position: relative;
+        
+        .btnSchedule{
+            position: absolute;
+            z-index: 99;
+            right: 10px;
+            top: 28px;
+            color: var(--white);
+            font-size: 1.0rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5px;
+        }
+    }
+
+
+    .containerScheduleRight{
+        display: flex;
+        align-items: flex-start;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid red;
+        width: 35%;
+
+        .scheduleTop{
+            padding: .75rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            
+
+            .fixed{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+    
+                .scheduleTitle{
+                    color: var(--dark-blue);
+                    font-weight: 700;
+                    font-size: 1.8rem;
+                }
+    
+                .dateSchedule{
+                    color: var(--other-red);
+                    font-weight: 700;
+                }
+            }
+            button {
+                padding: 0;
+                margin: 0;
+                width: 30px;
+                height: 30px;
+                border: none;
+                .btnSearch{
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+
+    }
+}

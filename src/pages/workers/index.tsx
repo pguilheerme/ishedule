@@ -1,17 +1,14 @@
-import { setupAPIClient } from "@/services/api"
-import { canSSRAuth } from "@/utils/canSSRAuth"
-import styles from "./styles.module.scss"
 import Head from "next/head"
+import styles from "./styles.module.scss"
 
-export default function Dashboard() {
+export default function Workers() {
     return (
-        <> 
+        <>
             <Head>
-                <title>Dashboard | Ischedule</title>
+                <title>Profissionais | Ischedule</title>
             </Head>
-            
             <div className={styles.containerCenter}>
-                dashboard
+                workers
             </div>
         </>
     )

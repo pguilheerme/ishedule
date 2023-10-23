@@ -35,7 +35,10 @@
 
         &:hover{
             color: var(--other-red);
-            border-bottom: 1px solid var(--other-red);
         }
+    }
+    .focus{
+        color: var(--other-red);
+        border-bottom: 1px solid var(--other-red);
     }
 }

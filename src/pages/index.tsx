@@ -43,15 +43,7 @@ export default function Home() {
 
 
   return (
-    <>
-      <Head>
-        <title>Ishedule - Faça seu login</title>
-      </Head>
-      <div className={styles.containerCenter}>
-        <aside>
-          <Image src={LoginImg} alt='login svg' className={styles.loginImg}/>
-        </aside>
-        <div className={styles.containerContent}>
+        <>
           <h2>Entrar</h2>
           <form onSubmit={handleLogin}>
             <label>Email ou Telefone</label>
@@ -98,16 +90,13 @@ export default function Home() {
               <p className={styles.text}>Não possui uma conta? <strong>Cadastre-se</strong></p>
             </Link>
 
-        </div>
-      </div>
-
-    </>
+        </>
   )
 }
 
-export const getServerSideProps = canSSRGuest(async (ctx) => {
+// export const getServerSideProps = canSSRGuest(async (ctx) => {
     
-  return {
-      props: {}
-  }
-})
+//   return {
+//       props: {}
+//   }
+// })

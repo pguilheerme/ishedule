@@ -2,32 +2,59 @@ import Link from 'next/link'
 import styles from './styles.module.scss'
 import Image from 'next/image'
 import logoImg from '../../../public/logoImg.svg'
+import { useState } from "react"
+import { useRouter } from 'next/router'
 
-export function Header () {
+function Header() {
+    const [focus, setFocus] = useState('dashboard')
+    const router = useRouter()
+
+
     return (
         <header className={styles.headerContainer}>
             <div className={styles.headerContent}>
 
                 <Link href="/dashboard">
-                    <Image src={logoImg} alt='logo ishedule'/>
+                    <Image src={logoImg} alt='logo ishedule' />
                 </Link>
 
                 <nav className={styles.navMenu}>
-                    <Link href="/dashboard">
-                        <p>Tela inicial</p>
-                    </Link>
-                    <Link href="/schedule">
-                        <p>Agenda</p>
-                    </Link>
-                    <Link href="/workers">
-                        <p>Profissionais</p>
-                    </Link>
-                    <Link href="/profile">
-                        <p>Editar perfil</p>
-                    </Link>
+                    <button onClick={() => {
+                        router.push('/dashboard')
+                        setFocus('dashboard')
+                    }}>
+                        <p className={focus === 'dashboard' && styles.focus}>Tela inicial</p>
+                    </button>
+                    <button onClick={() => {
+                        router.push('/schedule')
+                        setFocus('schedule')
+                    }}>
+                        <p className={focus === 'schedule' && styles.focus}>Agenda</p>
+                    </button>
+                    <button onClick={() => {
+                        router.push('/workers')
+                        setFocus('workers')
+                    }}>
+                        <p className={focus === 'workers' && styles.focus}>Profissionais</p>
+                    </button>
+                    <button onClick={() => {
+                        router.push('/profile')
+                        setFocus('profile')
+                    }}>
+                        <p className={focus === 'profile' && styles.focus}>Editar perfil</p>
+                    </button>
                 </nav>
 
             </div>
         </header>
+    )
+}
+
+export function LayoutHeader({children}) {
+    return(
+        <>
+            <Header/>
+            {children}
+        </>
     )
 }
