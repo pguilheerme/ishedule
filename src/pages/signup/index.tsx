@@ -15,7 +15,7 @@ export default function SignUp() {
     const { signUp } = useContext(AuthContext)
     const [form, setForm] = useState({
         name: '',
-        username: '',
+        email: '',
         password: '',
         confirmPassword: ''
     })
@@ -26,7 +26,7 @@ export default function SignUp() {
     async function handleSignUp(event: FormEvent) {
         event.preventDefault()
 
-        if (form.name === '' || form.username === '' || form.password === '' || form.confirmPassword === '') {
+        if (form.name === '' || form.email === '' || form.password === '' || form.confirmPassword === '') {
             toast.warning("Preencha todos os campos")
             return
         }
@@ -41,7 +41,7 @@ export default function SignUp() {
         let data = {
             ...form,
             name: form.name,
-            userName: form.username,
+            email: form.email,
             password: form.password
         }
 
@@ -59,12 +59,12 @@ export default function SignUp() {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                 />
-                <label>Email ou Telefone</label>
+                <label>Email</label>
                 <Input
                     withEye={false}
                     type='text'
-                    value={form.username}
-                    onChange={(e) => setForm({ ...form, username: e.target.value })}
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
                 /><label>Senha</label>
                 <Input
                     withEye={true}

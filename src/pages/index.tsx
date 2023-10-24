@@ -16,7 +16,7 @@ import { canSSRGuest } from '@/utils/canSSRGuest'
 
 export default function Home() {
   const { signIn } = useContext(AuthContext)
-  const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -24,7 +24,7 @@ export default function Home() {
   async function handleLogin(event: FormEvent) {
     event.preventDefault()
 
-    if(userName === "" || password === ""){
+    if(email === "" || password === ""){
         toast.warning("Preencha todos os campos")
         return 
     }
@@ -32,7 +32,7 @@ export default function Home() {
     setLoading(true)
 
     let data = {
-       userName,
+       email,
        password
     }
 
@@ -50,8 +50,8 @@ export default function Home() {
             <Input
             withEye={false}
               type='text'
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <label>Senha</label>
             <Input
