@@ -16,17 +16,17 @@ type AuthContextData = {
 type UserProps = {
     id: string,
     name: string,
-    userName: string,
+    email: string,
 }
 
 type SignUpProps = {
     name?: string,
-    userName?: string,
+    email?: string,
     password?: string
 }
 
 type SignInProps = {
-    userName: string,
+    email: string,
     password: string,
 }
 
@@ -59,12 +59,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if(token){
       
           api.get('/info').then(response => {
-            const { id, name, userName } = response.data;
+            const { id, name, email } = response.data;
     
             setUser({
               id,
               name,
-              userName
+              email
             })
     
           })
@@ -77,10 +77,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     
       }, [])
 
-    async function signIn ({userName, password}: SignInProps) {
+    async function signIn ({email, password}: SignInProps) {
         try{
             const res = await api.post('/auth', {
-                userName,
+                email,
                 password
             })
 
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setUser({
                 id,
                 name,
-                userName,
+                email,
             })
 
             //Passar token para as proximas requisicoes 
@@ -115,11 +115,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
-    async function signUp({name, userName, password}: SignUpProps) {
+    async function signUp({name, email, password}: SignUpProps) {
         try{
-            const res = await api.post("/users", {
+            const res = await api.post("/user/company", {
                 name,
-                userName,
+                email,
                 password
             })
 
@@ -129,7 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         }catch(err){
             toast.error("Erro ao cadastrar!")
-            console.log("ERRO AO CADASTRAR",err)
+            console.log("ERRO AO CADASTRAR", err)
         }
     }
 
