@@ -8,7 +8,7 @@ export function canSSRGuest<P>(fn: GetServerSideProps<P>) {
         const cookies = parseCookies(ctx)
 
         //Se tentar acessar a pagina porem tem login redirecionamos 
-        if(cookies ["@nextauth.token"]){
+        if(cookies ["@firebase.token"]){
             return {
                 redirect: {
                     destination: "/dashboard",

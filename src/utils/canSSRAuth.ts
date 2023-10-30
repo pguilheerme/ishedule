@@ -7,7 +7,7 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>) {
     return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
         const cookies = parseCookies(ctx)
 
-        const token = cookies["@nextauth.token"]
+        const token = cookies["@firebase.token"]
 
         if(!token) {
             return {
@@ -22,7 +22,7 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>) {
             return await fn(ctx)
         }catch(err){    
             if(err instanceof AuthTokenErrors){
-                destroyCookie(ctx, "@nextauth.token")
+                destroyCookie(ctx, "@firebase.token")
                 
                 return {
                     redirect: {

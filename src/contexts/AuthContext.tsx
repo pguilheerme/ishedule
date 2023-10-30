@@ -1,6 +1,6 @@
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { ReactNode, createContext, useEffect, useState } from "react";
-import  Router  from "next/router";
+import Router from "next/router";
 import { api } from "@/services/apiClient";
 import { toast } from "react-toastify";
 import { firebase, auth } from "@/services/firebase";
@@ -9,14 +9,16 @@ import { firebase, auth } from "@/services/firebase";
 type AuthContextData = {
     user?: UserProps,
     isAuthenticated?: boolean,
-    signIn: (credentials: SignInProps) => Promise<void>
+    signInWithEmailAndPassword: (credentials: SignInProps) => Promise<void>
     signOut: () => void,
-    signUp: (credentials: SignUpProps) => Promise<void>
+    signUpWithEmailAndPassword: (credentials: SignUpProps) => Promise<void>
+    signInWithGoogle: () => Promise<void>
+    signInWithFacebook: () => Promise<void>
 }
 
 type UserProps = {
     id: string,
-    name: string,
+    name?: string,
     email: string,
 }
 
@@ -39,127 +41,182 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
-    try{
+    try {
         destroyCookie(undefined, '@nextauth.token')
         Router.push("/")
     }
-    catch(err){
+    catch (err) {
         console.log("Erro ao deslogar")
     }
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const { '@nextauth.token': token } = parseCookies();
+    const { '@firebase.token': token } = parseCookies();
     const [user, setUser] = useState<UserProps>()
     const isAuthenticated = !!user
 
     useEffect(() => {
 
         // tentar pegar algo no cookie
-    
-        if(token){
-      
-          api.get('/info').then(response => {
-            const { id, name, email } = response.data;
-    
-            setUser({
-              id,
-              name,
-              email
-            })
-    
-          })
-          .catch(() => {
 
-            signOut();
-          })
+        if (token) {
+
+            api.get('/user/company').then(response => {
+                const { id, name, email } = response.data
+
+                setUser({
+                    id,
+                    name,
+                    email
+                })
+
+            })
+                .catch(() => {
+
+                    signOut();
+                })
         }
-    
-    
-      }, [])
-
-    async function signIn ({email, password}: SignInProps) {
-        try{
-            const res = await api.post('/auth', {
-                email,
-                password
-            })
-
-            //console.log(res.data)
-
-            const { id, name, token } = res.data
-
-            setCookie(undefined, '@nextauth.token', token, {
-                maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
-                path: "/" // quais caminhos terao acesso a cookie
-            })
-
-            setUser({
-                id,
-                name,
-                email,
-            })
-
-            //Passar token para as proximas requisicoes 
-
-            api.defaults.headers["Authorization"] = `Bearer ${token}`
-
-            toast.success("Logado com sucesso!")
-
-            //Redirecionar para /dashboard
-            Router.push("/dashboard")
 
 
-        }catch(err){
-            toast.error("Erro ao acessar!")
-            console.log("Erro ao acessar", err)
-        }
-    }
+    }, [])
 
-    async function signInWithGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider()
-        const result = await auth.signInWithPopup(provider)
+    async function signUpWithEmailAndPassword({ email, password }: SignUpProps) {
+        try {
+            const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password)
 
-        if(result.user){
-            const { displayName ,email, uid, getIdToken } = result.user
+            if (userCredential) {
 
-            if(!result.user){
-                throw new Error
+                const { uid, email } = userCredential.user;
+
+                setUser({
+                    id: uid,
+                    email: email
+                })
+
+                const response = await api.post('/user/company', {
+                    id: uid,
+                    email: email,
+                    name: 'leo'
+                })
+                console.log(response);
             }
 
 
-            setUser({
-                id: uid,
-                name: displayName,
-                email: email,
-            })
-        }
-
-
-    }
-
-    async function signUp({name, email, password}: SignUpProps) {
-        try{
-            const res = await api.post("/user/company", {
-                name,
-                email,
-                password
-            })
+            Router.push("/")
 
             toast.success("Conta criada com sucesso!")
 
-            Router.push("/")
 
-        }catch(err){
+        } catch (err) {
             toast.error("Erro ao cadastrar!")
             console.log("ERRO AO CADASTRAR", err)
         }
     }
 
+    async function signInWithEmailAndPassword({ email, password }: SignInProps) {
+        try {
+            const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password)
+
+            if (userCredential) {
+                const { uid, email } = userCredential.user;
+                const token = await userCredential.user.getIdToken()
+
+                setCookie(undefined, "@firebase.token", token, {
+                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
+                    path: "/" // quais caminhos terao acesso a cookie
+                })
+
+                setUser({
+                    id: uid,
+                    email: email
+                })
 
 
-    return(
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut, signUp,  }}>
+
+                api.defaults.headers["Authorization"] = `Bearer ${token}`
+
+                toast.success("Logado com sucesso!")
+                Router.push("/dashboard")
+
+
+            }
+        } catch (error) {
+            toast.error("Erro ao acessar!")
+            console.log("Erro ao acessar", error)
+        }
+
+    }
+
+    async function signInWithFacebook() {
+        try {
+            const provider = new firebase.auth.FacebookAuthProvider()
+            const result = await auth.signInWithPopup(provider)
+
+            if (result.user) {
+                const { email, uid } = result.user
+                const token = await result.user.getIdToken()
+
+                setCookie(undefined, '@firebase.token', token, {
+                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
+                    path: "/" // quais caminhos terao acesso a cookie
+                })
+
+                setUser({
+                    id: uid,
+                    email: email,
+                })
+
+                api.post("/user/company", {
+                    id: uid,
+                    email: email
+                })
+
+                api.defaults.headers["Authorization"] = `Bearer ${token}`
+
+                toast.success("Logado com sucesso!")
+
+            }
+        } catch (error) {
+            toast.error("Erro ao acessar com Facebook!")
+            console.log("Erro ao acessar", error)
+        }
+
+    }
+
+    async function signInWithGoogle() {
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider()
+            const result = await auth.signInWithPopup(provider)
+
+            if (result.user) {
+                const { email, uid } = result.user
+                const token = await result.user.getIdToken()
+
+                setCookie(undefined, '@firebase.token', token, {
+                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
+                    path: "/" // quais caminhos terao acesso a cookie
+                })
+
+                setUser({
+                    id: uid,
+                    email: email,
+                })
+
+                api.defaults.headers["Authorization"] = `Bearer ${token}`
+
+                toast.success("Logado com sucesso!")
+
+            }
+        } catch (error) {
+            toast.error("Erro ao acessar com Google!")
+            console.log("Erro ao acessar", error)
+        }
+
+    }
+
+
+    return (
+        <AuthContext.Provider value={{ user, isAuthenticated, signUpWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithGoogle, signInWithFacebook }}>
             {children}
         </AuthContext.Provider>
     )

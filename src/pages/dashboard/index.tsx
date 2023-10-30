@@ -17,10 +17,10 @@ export default function Dashboard() {
     )
 }
 
-// export const getServerSideProps = canSSRAuth(async (ctx) => {
-//     const apiClient = setupAPIClient(ctx)
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+    const apiClient = setupAPIClient(ctx)
 
-//     return {
-//         props: {}
-//     }
-// })
+    return {
+        props: {}
+    }
+})
