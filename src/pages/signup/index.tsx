@@ -12,7 +12,7 @@ import { toast } from 'react-toastify'
 import { AuthContext } from '@/contexts/AuthContext'
 
 export default function SignUp() {
-    const { signUp } = useContext(AuthContext)
+    const { signUpWithEmailAndPassword } = useContext(AuthContext)
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -45,7 +45,7 @@ export default function SignUp() {
             password: form.password
         }
 
-        await signUp(data)
+        await signUpWithEmailAndPassword(data)
     }
 
     return (
