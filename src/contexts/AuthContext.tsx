@@ -3,6 +3,7 @@ import { ReactNode, createContext, useEffect, useState } from "react";
 import  Router  from "next/router";
 import { api } from "@/services/apiClient";
 import { toast } from "react-toastify";
+import { firebase, auth } from "@/services/firebase";
 
 
 type AuthContextData = {
@@ -113,6 +114,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
             toast.error("Erro ao acessar!")
             console.log("Erro ao acessar", err)
         }
+    }
+
+    async function signInWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider()
+        const result = await auth.signInWithPopup(provider)
+
+        if(result.user){
+            const { displayName ,email, uid, getIdToken } = result.user
+
+            if(!result.user){
+                throw new Error
+            }
+
+
+            setUser({
+                id: uid,
+                name: displayName,
+                email: email,
+            })
+        }
+
+
     }
 
     async function signUp({name, email, password}: SignUpProps) {
