@@ -46,7 +46,7 @@ export default function Home() {
         <>
           <h2>Entrar</h2>
           <form onSubmit={handleLogin}>
-            <label>Email ou Telefone</label>
+            <label>Email</label>
             <Input
             withEye={false}
               type='text'

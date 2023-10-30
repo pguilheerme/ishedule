@@ -1,3 +1,4 @@
+import { useEffect } from  'react';
 import Link from 'next/link'
 import styles from './styles.module.scss'
 import Image from 'next/image'
@@ -8,8 +9,11 @@ import { useRouter } from 'next/router'
 function Header() {
     const [focus, setFocus] = useState('dashboard')
     const router = useRouter()
-
-
+    
+    useEffect(() => {
+      router.push('/dashboard')
+    }, [])
+    
     return (
         <header className={styles.headerContainer}>
             <div className={styles.headerContent}>
