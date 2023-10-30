@@ -1,13 +1,17 @@
 .containerCenter {
     display: flex;
     width: 70vw;
-    height: 70vh;
     margin: 3.5rem auto !important;
     justify-content: space-evenly;
+    gap: 1rem;
   
     .containerScheduleLeft {
       position: relative;
       height: 100%;
+      display: flex;
+      flex-flow: column;
+      justify-content: start;
+      align-items: center;
   
       .scheduleContents {
         width: 90%;
@@ -47,13 +51,14 @@
       }
   
       .statusList {
+        width: 100%;
         margin-top: 10px;
-        max-height: 45%;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         filter: drop-shadow(16px 4px 8px rgba(0, 0, 0, 0.08));
+        flex: 1;
   
         .statusHeader {
           gap: 1rem;
@@ -61,7 +66,7 @@
           justify-content: center;
           align-items: center;
           background: var(--white);
-          height: 30%;
+          height: 2rem;
           width: 100%;
           display: flex;
   
@@ -110,20 +115,31 @@
           justify-content: center;
           background: linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.00) 100%), rgba(47, 49, 124, 0.81);
           width: 100%;
-          height: 60vh;
+          min-height: 50px;
+          flex: 1;
+        }
+
+        .warningNotEmptyRegisters {
+          color: white;
+          font-weight: bold;
         }
       }
     }
   
     .containerScheduleRight {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
+      flex-flow: column;
       border-radius: 12px;
       background: #fff;
-      border: 1px solid red;
       width: 30%;
+      min-width: 300px;
       height: 100%;
+
+      .rigthScheduleContent {
+        padding: 4px 0;
+      }
   
       .scheduleTop {
         padding: 0.75rem;

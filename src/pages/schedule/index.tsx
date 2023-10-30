@@ -51,7 +51,7 @@ export default function Schedule() {
               <div className={styles.scheduleButtons}>
                 <button
                   className={styles.btnSchedule}
-                  onClick={() => setDate(dayjs(new Date()))}
+                  onClick={() => handleFormatDate(dayjs(new Date()))}
                 >
                   <Image src={todayIcon} alt="today icon" width={20} />
                   Hoje
@@ -100,7 +100,11 @@ export default function Schedule() {
                 Ausências
               </button>
             </div>
-            <div className={styles.statusContent}></div>
+            <div className={styles.statusContent}>
+              {
+                false ? "" : <p className={styles.warningNotEmptyRegisters}>Não há registros!</p>
+              }
+            </div>
           </div>
         </div>
         <div className={styles.containerScheduleRight}>
@@ -120,7 +124,7 @@ export default function Schedule() {
             </button>
           </div>
           <div className={styles.rigthScheduleContent}>
-            
+            <p>Não há registros!</p>
           </div>
         </div>
 
