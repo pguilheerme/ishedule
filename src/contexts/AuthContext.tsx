@@ -12,6 +12,7 @@ type AuthContextData = {
     signInWithEmailAndPassword: (credentials: SignInProps) => Promise<void>
     signOut: () => void,
     signUpWithEmailAndPassword: (credentials: SignUpProps) => Promise<void>
+    signUpWithGoogle: (credentials: SignUpProps) => Promise<void>
     signInWithGoogle: () => Promise<void>
     signInWithFacebook: () => Promise<void>
 }
@@ -42,7 +43,7 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
     try {
-        destroyCookie(undefined, '@nextauth.token')
+        destroyCookie(undefined, '@firebase.token')
         Router.push("/")
     }
     catch (err) {
@@ -61,7 +62,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (token) {
 
-            api.get('/user/company').then(response => {
+            api.get('/user/company', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }).then(response => {
                 const { id, name, email } = response.data
 
                 setUser({
@@ -71,7 +74,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 })
 
             })
-                .catch(() => {
+                .catch((error) => {
+                    console.log(error);
 
                     signOut();
                 })
@@ -80,7 +84,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     }, [])
 
-    async function signUpWithEmailAndPassword({ email, password }: SignUpProps) {
+    async function signUpWithEmailAndPassword({ email, password, name }: SignUpProps) {
         try {
             const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password)
 
@@ -90,13 +94,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
                 setUser({
                     id: uid,
-                    email: email
+                    email: email,
+                    name: name
                 })
 
                 const response = await api.post('/user/company', {
                     id: uid,
                     email: email,
-                    name: 'leo'
+                    name: name
                 })
                 console.log(response);
             }
@@ -131,13 +136,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     email: email
                 })
 
-
-
                 api.defaults.headers["Authorization"] = `Bearer ${token}`
 
                 toast.success("Logado com sucesso!")
                 Router.push("/dashboard")
-
 
             }
         } catch (error) {
@@ -166,14 +168,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     email: email,
                 })
 
-                api.post("/user/company", {
-                    id: uid,
-                    email: email
-                })
-
                 api.defaults.headers["Authorization"] = `Bearer ${token}`
 
                 toast.success("Logado com sucesso!")
+                Router.push("/dashboard")
 
             }
         } catch (error) {
@@ -183,16 +181,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     }
 
-    async function signInWithGoogle() {
+    async function signUpWithGoogle() {
         try {
             const provider = new firebase.auth.GoogleAuthProvider()
             const result = await auth.signInWithPopup(provider)
 
-            if (result.user) {
-                const { email, uid } = result.user
+            if(result.user) {
+                const { email, uid, displayName } = result.user
                 const token = await result.user.getIdToken()
 
-                setCookie(undefined, '@firebase.token', token, {
+                setCookie(null, '@firebase.token', token, {
                     maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
                     path: "/" // quais caminhos terao acesso a cookie
                 })
@@ -200,11 +198,53 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 setUser({
                     id: uid,
                     email: email,
+                    name: displayName
+                })
+
+                api.post('/user/company', {
+                    id: uid,
+                    email: email,
+                    name: displayName
+                }).then(res => console.log(res.data)).catch(err => console.log(err))
+
+                api.defaults.headers["Authorization"] = `Bearer ${token}`
+
+                toast.success("Logado com sucesso!")
+                Router.push("/")
+
+            }
+
+
+        } catch (error) {
+            toast.error("Erro ao criar conta com Google!")
+            console.log(error)
+        }
+    }
+
+    async function signInWithGoogle() {
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider()
+            const result = await auth.signInWithPopup(provider)
+
+            if (result.user) {
+                const { email, uid, displayName } = result.user
+                const token = await result.user.getIdToken()
+
+                setCookie(null, '@firebase.token', token, {
+                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
+                    path: "/" // quais caminhos terao acesso a cookie
+                })
+
+                setUser({
+                    id: uid,
+                    email: email,
+                    name: displayName
                 })
 
                 api.defaults.headers["Authorization"] = `Bearer ${token}`
 
                 toast.success("Logado com sucesso!")
+                Router.push("/dashboard")
 
             }
         } catch (error) {
@@ -216,7 +256,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signUpWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithGoogle, signInWithFacebook }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signUpWithGoogle, signUpWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithGoogle, signInWithFacebook }}>
             {children}
         </AuthContext.Provider>
     )

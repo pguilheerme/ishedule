@@ -5,14 +5,13 @@ import styles from '@/styles/Home.module.scss'
 import { Input } from '@/components/Ui/input'
 import { useState, FormEvent, useContext } from 'react'
 import Link from 'next/link'
-import LoginImg from '../../../public/loginImg.svg'
 import googleIconImg from '../../../public/googleIconImg.svg'
 import facebookIconImg from '../../../public/facebookIconImg.svg'
 import { toast } from 'react-toastify'
 import { AuthContext } from '@/contexts/AuthContext'
 
 export default function SignUp() {
-    const { signUpWithEmailAndPassword } = useContext(AuthContext)
+    const { signUpWithEmailAndPassword, signUpWithGoogle, user } = useContext(AuthContext)
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -46,10 +45,23 @@ export default function SignUp() {
         }
 
         await signUpWithEmailAndPassword(data)
+        setLoading(false)
+    }
+
+    async function handleSignUpWithGoogle() {
+        if (!user) {
+            await signUpWithGoogle({
+                ...form,
+                name: form.name
+            })
+        }
     }
 
     return (
         <>
+            <Head>
+                <title>Crie sua conta | Ishedule</title>
+            </Head>
             <h2>Cadastrar</h2>
             <form onSubmit={handleSignUp}>
                 <label>Nome</label>
@@ -98,7 +110,7 @@ export default function SignUp() {
             </div>
 
             <div className={styles.buttonsLogin}>
-                <button className={styles.btnGoogle}>
+                <button className={styles.btnGoogle} onClick={handleSignUpWithGoogle}>
                     <Image src={googleIconImg} alt="imagem do google" />
                 </button>
                 <button className={styles.btnFacebook}>
