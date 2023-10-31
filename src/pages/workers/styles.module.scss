@@ -3,6 +3,7 @@
   width: 70vw;
   margin: 3.5rem auto !important;
   justify-content: space-evenly;
+  flex-direction: column;
 }
 
 .containerTop {
@@ -10,6 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
 
   p {
     color: var(--dark-blue);
