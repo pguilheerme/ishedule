@@ -2,9 +2,7 @@ import Head from "next/head"
 import styles from "./styles.module.scss"
 import Image from "next/image";
 import plus from "../../../public/plus.svg";
-import dtWorker from "../../../public/dtWorker.svg";
-import pencil from "../../../public/pencil.svg";
-import trash from "../../../public/trash.svg";
+import { WorkerCard } from "@/components/WorkerCard";
 
 export default function Workers() {
     return (
@@ -20,6 +18,8 @@ export default function Workers() {
                         <Image src={plus} alt="plus" width={20} />
                     </button>
                 </div>
+                <WorkerCard name="Antonia Pereira" role="Gerente" avatar="" />
+                <WorkerCard name="Fernando Lima" role="Estagiário" avatar="" />
             </div>
         </>
     )
