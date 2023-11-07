@@ -1,7 +1,168 @@
 .containerCenter {
-  display: flex;
   width: 70vw;
-  height: 70vh;
   margin: 3.5rem auto !important;
   justify-content: space-evenly;
+
+  .select{
+    margin-top: 1rem;
+    float: right;
+  }
+}
+
+.headerProfile {
+  width: 100%;
+  display: flex;
+  position: relative;
+  height: 280px;
+
+  .likes{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+    position: absolute;
+    bottom: 1rem;
+    right: 2rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+    span{
+      margin-left: 5px;
+    }
+  }
+
+  .avatar {
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+  
+    .info {
+      margin: 0 0 1rem 1rem;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+  
+}
+
+.labelBanner {
+  border-radius: 3rem;
+  width: 100%;
+  height: 280px;
+}
+.labelAvatar {
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+}
+
+.labelBanner,
+.labelAvatar {
+  background-color: #1f204166;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
+
+  label {
+    z-index: 99;
+    position: absolute;
+    opacity: 0.7;
+    transition: all 0.7s;
+
+    &:hover {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+}
+
+.bannerPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3rem;
+}
+
+.avatarPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.select {
+  appearance: none;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  width: 15rem;
+  padding: 0.5rem 4rem 0.5rem 0.5rem;
+  background: var(--arrow-icon) no-repeat right 0.8em center / 1.4em,
+  linear-gradient(to left, var(--dark-blue) 3em, var(--other-red) 3em);
+  color: var(--white);
+  font-weight: bold;
+  border-radius: 0.5em;
+  cursor: pointer;
+
+  &::-ms-expand {
+    display: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  option {
+    color: #000;
+  }
+}
+.menuServices{
+  display: flex;
+  margin-top: 4rem;
+}
+
+.addService{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 15rem;
+  height: 12rem;
+  transition: all 0.7s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .plusDiv{
+    background: var(--gray-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+    width: 90%;
+    border-radius: 2rem; 
+  }
+  
+  span{
+    margin-top: 0.5rem;
+    font-weight: 700;
+  }
+}
+
+.image{
+  cursor: pointer;
 }

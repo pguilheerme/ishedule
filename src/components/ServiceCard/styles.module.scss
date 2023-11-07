@@ -1,0 +1,33 @@
+.addService {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 15rem;
+  height: 12rem;
+  transition: all 0.7s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .imageService {
+    height: 90%;
+    width: 90%;
+    border-radius: 2rem;
+    object-fit: cover;
+  }
+
+  .editDiv {
+    position: absolute;
+    margin-bottom: 1rem;
+  }
+
+  span {
+    color: var(--other-red);
+    margin-top: 0.5rem;
+    font-weight: 700;
+  }
+}
