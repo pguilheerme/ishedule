@@ -8,7 +8,7 @@ export function setupAPIClient(ctx = undefined) {
 
 
     const api = axios.create({
-        baseURL: "http://192.168.30.104:3000",
+        baseURL: "http://192.168.30.109:3000",
         headers: {
             Authorization: `Bearer ${token}`
         }
