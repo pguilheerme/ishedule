@@ -1,10 +1,27 @@
+import { useState } from "react";
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import userShape from "../../../public/userShape.png";
 import { LuCalendarClock, LuPencil, LuTrash2 } from "react-icons/lu";
+import { BasicModal } from "../Modal";
+import { DraggableDialog } from "../Dialog";
 
-export function WorkerCard({ avatar, name, role, color }) {
+export function WorkerCard({ avatar, name, role, func }) {
+  const [editModal, setEditModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
+  const handleOpenDialog = () => setOpenDialog(true)
+  const handleCloseDialog = () => setOpenDialog(false)
+  const handleCloseModal = () => setOpenModal(false)
+  const handleOpenModal = (param) => {
+    setEditModal(param)
+    setOpenModal(true)
+  }
+
+
   return (
+    <>
+    
     <div className={styles.workerCard}>
       <div className={styles.workerContent}>
         {avatar ? (
@@ -31,10 +48,13 @@ export function WorkerCard({ avatar, name, role, color }) {
       </div>
 
       <div className={styles.workerActions}>
-        <LuCalendarClock color="#2F317C" size={30} cursor="pointer" />
-        <LuPencil color="#2F317C" size={30} cursor="pointer" />
-        <LuTrash2 color="#e83f5b" size={30} cursor="pointer" />
+        <button className={styles.btnActions}><LuCalendarClock color="#2F317C" size={25} cursor="pointer"/></button>
+        <button onClick={() => handleOpenModal(true)}  className={styles.btnActions}><LuPencil color="#2F317C" size={25} cursor="pointer"/></button>
+        <button className={styles.btnActions} onClick={handleOpenDialog}><LuTrash2 color="#e83f5b" size={25} cursor="pointer" /></button>
       </div>
     </div>
-  );
+        <BasicModal open={openModal} onClose={handleCloseModal} edit={editModal} func={func} />
+        <DraggableDialog open={openDialog} onClose={handleCloseDialog} />
+    </>
+  )
 }

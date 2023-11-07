@@ -21,6 +21,7 @@ type UserProps = {
     id: string,
     name?: string,
     email: string,
+
 }
 
 type SignUpProps = {
@@ -73,6 +74,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     email
                 })
 
+                console.log(response.data)
+                
+
             })
                 .catch((error) => {
                     console.log(error);
@@ -91,6 +95,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             if (userCredential) {
 
                 const { uid, email } = userCredential.user;
+                const token = await userCredential.user.getIdToken()
 
                 setUser({
                     id: uid,
@@ -102,7 +107,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     id: uid,
                     email: email,
                     name: name
-                })
+                },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+
+                )
                 console.log(response);
             }
 
@@ -126,17 +138,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 const { uid, email } = userCredential.user;
                 const token = await userCredential.user.getIdToken()
 
-                setCookie(undefined, "@firebase.token", token, {
-                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
-                    path: "/" // quais caminhos terao acesso a cookie
-                })
 
                 setUser({
                     id: uid,
                     email: email
                 })
 
-                api.defaults.headers["Authorization"] = `Bearer ${token}`
+                const {data} = await api.get('/auth/company/signin', {
+                    headers: {'Authorization': `Bearer ${token}`}
+                })
+
+                api.defaults.headers["Authorization"] = `Bearer ${data.access_token}`
+                
+
+                setCookie(undefined, "@firebase.token", data.access_token, {
+                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
+                    path: "/" // quais caminhos terao acesso a cookie
+                })
 
                 toast.success("Logado com sucesso!")
                 Router.push("/dashboard")
@@ -186,7 +204,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const provider = new firebase.auth.GoogleAuthProvider()
             const result = await auth.signInWithPopup(provider)
 
-            if(result.user) {
+            if (result.user) {
                 const { email, uid, displayName } = result.user
                 const token = await result.user.getIdToken()
 

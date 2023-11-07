@@ -23,11 +23,15 @@
   }
 
   .btnNew {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     cursor: pointer;
     background: var(--other-red);
     width: auto;
-    padding: 5px;
+    padding: 10px;
     border-radius: 0.5rem;
     color: #fff;
+    width: 100px
   }
 }

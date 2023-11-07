@@ -30,5 +30,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1rem;
+
+    .btnActions {
+        border-radius: 50px;
+        padding: 10px;
+        transition: 0.3s ease;
+
+        &:hover{
+            background: #F0BBC3;
+        }
+    }
 }
