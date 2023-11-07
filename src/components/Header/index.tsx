@@ -12,6 +12,7 @@ function Header() {
 
   useEffect(() => {
     router.push("/dashboard");
+    setFocus("dashboard");
   }, []);
 
   return (
