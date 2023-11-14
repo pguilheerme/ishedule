@@ -5,6 +5,7 @@ import Image from "next/image";
 import cameraAdd from "../../../public/cameraAdd.svg";
 import { AiFillHeart } from "react-icons/ai";
 import { BsPlusLg } from "react-icons/bs";
+import { CiLock, CiUnlock } from "react-icons/ci";
 import { ServiceCard } from "../../components/ServiceCard";
 
 export default function Profile() {
@@ -141,6 +142,29 @@ export default function Profile() {
           </div>
           <ServiceCard name="Nome do serviço" />
           {/* {services.map((item, index) => ())}  */}
+        </div>
+        <div className={styles.menuTime}>
+          <h2>Horário de Abertura e Fechamento</h2>
+          <div className={styles.timesDiv}>
+            <div className={styles.time}>
+              <div className={styles.timeLeft}>
+                <h3>Abertura</h3>
+                <p>8:00h</p>
+              </div>
+              <div className={styles.Rigth}>
+                <CiUnlock color="#fff" size={50} />
+              </div>
+            </div>
+            <div className={styles.time}>
+              <div className={styles.timeLeft}>
+                <h3>Fechamento</h3>
+                <p>17:00h</p>
+              </div>
+              <div className={styles.Rigth}>
+                <CiLock color="#fff" size={50} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
