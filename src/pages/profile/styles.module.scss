@@ -131,6 +131,10 @@
 .menuServices{
   display: flex;
   margin-top: 4rem;
+  max-width: 100vw;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding: 1rem 0;
 }
 
 .addService{
@@ -138,7 +142,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 15rem;
+  min-width: 15rem;
   height: 12rem;
   transition: all 0.7s;
   cursor: pointer;

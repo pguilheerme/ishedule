@@ -141,6 +141,13 @@ export default function Profile() {
             <span>Adicionar novo serviço</span>
           </div>
           <ServiceCard name="Nome do serviço" />
+          <ServiceCard name="Nome do serviço" />
+          <ServiceCard name="Nome do serviço" />
+          <ServiceCard name="Nome do serviço" />
+          <ServiceCard name="Nome do serviço" />
+          <ServiceCard name="Nome do serviço" />
+          <ServiceCard name="Nome do serviço" />
+          <ServiceCard name="Nome do serviço" />
           {/* {services.map((item, index) => ())}  */}
         </div>
         <div className={styles.menuTime}>

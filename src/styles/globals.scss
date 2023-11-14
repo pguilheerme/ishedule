@@ -76,10 +76,6 @@ body {
   background: var(--other-red) !important;
 }
 
-.css-nk89i7-MuiPickersCalendarHeader-root {
-  display: none !important;
-}
-
 .css-1t0788u-MuiPickersSlideTransition-root-MuiDayCalendar-slideTransition {
   min-height: 200px !important;
 }
@@ -93,8 +89,22 @@ body {
 }
 
 .css-16b5y55-MuiPickersLayout-contentWrapper {
-  height: 240px;
+  height: 260px;
 }
 .css-1q04gal-MuiDateCalendar-root {
   height: auto;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: var(--gray-300); 
+
+  &:hover{
+    background: var(--gray-400); 
+  }
 }

@@ -3,10 +3,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 15rem;
+  min-width: 15rem;
   height: 12rem;
   transition: all 0.7s;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     opacity: 1;

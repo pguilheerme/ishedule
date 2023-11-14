@@ -8,7 +8,7 @@ export function ServiceCard({name}) {
       <div className={styles.editDiv}>
         <LuPencil color="#fff" size={40} />
       </div>
-      <Image src="" alt="" className={styles.imageService} />
+      <img src="https://fastly.picsum.photos/id/865/536/354.jpg?hmac=n_LVs-V-EPWf--0OsJIt41c5IPV_dgyBcXxOi1lh-BM" alt="" className={styles.imageService} />
       <span>{name}</span>
     </div>
   );
