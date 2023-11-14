@@ -75,7 +75,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 })
 
                 console.log(response.data)
-                
+
 
             })
                 .catch((error) => {
@@ -144,12 +144,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     email: email
                 })
 
-                const {data} = await api.get('/auth/company/signin', {
-                    headers: {'Authorization': `Bearer ${token}`}
+                const { data } = await api.get('/auth/company/signin', {
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
 
                 api.defaults.headers["Authorization"] = `Bearer ${data.access_token}`
-                
+
 
                 setCookie(undefined, "@firebase.token", data.access_token, {
                     maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
@@ -208,26 +208,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 const { email, uid, displayName } = result.user
                 const token = await result.user.getIdToken()
 
-                setCookie(null, '@firebase.token', token, {
-                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
-                    path: "/" // quais caminhos terao acesso a cookie
-                })
-
                 setUser({
                     id: uid,
                     email: email,
                     name: displayName
                 })
 
-                api.post('/user/company', {
+                const response = await api.post('/user/company', {
                     id: uid,
                     email: email,
                     name: displayName
-                }).then(res => console.log(res.data)).catch(err => console.log(err))
+                },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
 
-                api.defaults.headers["Authorization"] = `Bearer ${token}`
+                )
+                console.log(response);
 
-                toast.success("Logado com sucesso!")
+                toast.success("Conta com o Google criada!")
                 Router.push("/")
 
             }
@@ -248,18 +249,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 const { email, uid, displayName } = result.user
                 const token = await result.user.getIdToken()
 
-                setCookie(null, '@firebase.token', token, {
-                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
-                    path: "/" // quais caminhos terao acesso a cookie
-                })
-
                 setUser({
                     id: uid,
                     email: email,
                     name: displayName
                 })
 
-                api.defaults.headers["Authorization"] = `Bearer ${token}`
+                const { data } = await api.get('/auth/company/signin', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+
+                api.defaults.headers["Authorization"] = `Bearer ${data.access_token}`
+
+                console.log(data);
+                
+
+                setCookie(undefined, "@firebase.token", data.access_token, {
+                    maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
+                    path: "/" // quais caminhos terao acesso a cookie
+                })
+
 
                 toast.success("Logado com sucesso!")
                 Router.push("/dashboard")
