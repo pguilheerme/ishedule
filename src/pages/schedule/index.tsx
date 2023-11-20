@@ -36,9 +36,6 @@ export default function Schedule() {
     setFormatDate(`${dayString} de ${upperMonth}`);
   }
 
-  const handleOpts = () => {
-  }
-
   return (
     <>
       <Head>
@@ -60,10 +57,6 @@ export default function Schedule() {
                 >
                   <Image src={todayIcon} alt="today icon" width={20} />
                   Hoje
-                </button>
-                <button className={styles.btnSchedule} onClick={handleOpts}>
-                  <Image src={calendarIcon} alt="calendar icon" width={20} />
-                  Dia
                 </button>
               </div>
             </div>
