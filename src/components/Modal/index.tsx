@@ -107,10 +107,26 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
         }
     }
 
-    const handleEditProfessional = async () => {
-        const response = await api.patch('/professionals')
+    const handleEditProfessional = async (e) => {
+        e.preventDefault()
+        setDisabled(true)
+        try {
+            const response = await api.patch('/professionals', {
+                name: funcName,
+                    role: funcRole,
+                    avatar_url: avatarUrl 
+                }, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })  
+        
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setDisabled(false)
+        }
     }
-
     return (
         <Modal
             open={open}
@@ -154,7 +170,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
                                 type="text"
                                 value={funcName}
                                 onChange={(e) => setFuncName(e.target.value)}
-                                className={styles.input}
+                                className={styles.input}    
                             />
                         </div>
                         <label>Cargo</label>
@@ -169,7 +185,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
                         </div>
                         <div className={styles.containerButtons}>
                             <button className={styles.btnCancel} onClick={onClose}>Cancelar</button>
-                            <button disabled={disabled} className={styles.btnConfirm} onClick={(e) => handleCreateProfessional(e)} >Concluído</button>
+                            <button disabled={disabled} className={styles.btnConfirm} onClick={(e) => edit ? handleEditProfessional(e) : handleCreateProfessional(e)} >Concluído</button>
                         </div>
                     </form>
                 </div>
