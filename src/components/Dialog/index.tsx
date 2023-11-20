@@ -1,15 +1,36 @@
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import styles from './styles.module.scss'
+import { api } from '@/services/apiClient';
+import { parseCookies } from 'nookies';
+import { useContext } from 'react';
+import { AuthContext } from '@/contexts/AuthContext';
 
 type PropsDialog = {
     open: boolean,
     onClose: () => void
+    id: string
 }
 
 
-export function DraggableDialog({ open, onClose }: PropsDialog) {
+export function DraggableDialog({ open, onClose, id }: PropsDialog) {
+    const { getDataCompany } = useContext(AuthContext)
+    const { '@firebase.token': token } = parseCookies();
+
+
+    async function handleDeleteProfessional() {
+        try {
+            const response = await api.delete(`/professionals/${id}`, {
+                headers:{
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+
+            getDataCompany()
+            onClose()
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <>
@@ -24,7 +45,7 @@ export function DraggableDialog({ open, onClose }: PropsDialog) {
                     <button className={styles.btnCancel} onClick={onClose}>
                         Cancelar
                     </button>
-                    <button className={styles.btnConfirm}>
+                    <button className={styles.btnConfirm} onClick={handleDeleteProfessional}>
                         Sim, tenho
                     </button>
                 </div>

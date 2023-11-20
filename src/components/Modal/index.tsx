@@ -9,13 +9,13 @@ import { getDownloadURL } from 'firebase/storage'
 import { api } from '@/services/apiClient';
 import { parseCookies } from 'nookies';
 import { AuthContext } from '@/contexts/AuthContext';
-import  Router  from 'next/router';
-
+import { toast } from 'react-toastify'
 
 type propsModal = {
     open: boolean,
     edit?: boolean,
     func?: {
+        id: string,
         name: string,
         role: string,
         avatar_url: string
@@ -80,48 +80,65 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
         e.preventDefault()
         try {
 
-            const avatarUrl = await uploadAvatar(imageAvatar)
+            const avatar_url = await uploadAvatar(imageAvatar)
 
             const response = await api.post('/professionals', {
                 name: funcName,
                 role: funcRole,
-                avatar_url: avatarUrl 
+                avatar_url: avatar_url
             }, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
-            
+
             getDataCompany()
-            Router.push('/workers')
             setAvatarUrl('')
             setImageAvatar(null)
             setFuncName('')
             setFuncRole('')
             onClose()
-        
+
         } catch (error) {
+            toast.error('Erro ao criar funcionário')
             console.log(error)
         } finally {
             setDisabled(false)
         }
     }
 
-    const handleEditProfessional = async (e) => {
+    const handleEditProfessional = async (e, id: string) => {
         e.preventDefault()
         setDisabled(true)
+
+
         try {
-            const response = await api.patch('/professionals', {
+            let avatar_url: string | boolean = func.avatar_url
+            
+            if (func.avatar_url != avatarUrl) {
+                avatar_url = await uploadAvatar(imageAvatar)
+
+                if(!avatar_url) {
+                    console.log('Error')
+                    throw new Error()
+                }
+            }
+
+            const response = await api.patch(`/professionals/${id}`, {
                 name: funcName,
-                    role: funcRole,
-                    avatar_url: avatarUrl 
-                }, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                })  
-        
+                role: funcRole,
+                avatar_url: avatar_url
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+
+            getDataCompany()
+            onClose()
+
         } catch (error) {
+            toast.error('Erro ao editar funcionário')
             console.log(error)
         } finally {
             setDisabled(false)
@@ -140,9 +157,9 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
                 </div>
                 <div className={styles.containerForm}>
                     <form>
-                        <div className={avatarUrl? styles.edit : styles.labelAvatar}>
+                        <div className={avatarUrl ? styles.edit : styles.labelAvatar}>
                             <label htmlFor="inpAvatar">
-                                <Image src={avatarUrl? pencil : cameraAdd} alt="Camera add icon" width={20} className={styles.image} />
+                                <Image src={avatarUrl ? pencil : cameraAdd} alt="Camera add icon" width={20} className={styles.image} />
                             </label>
                             <input
                                 required
@@ -170,7 +187,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
                                 type="text"
                                 value={funcName}
                                 onChange={(e) => setFuncName(e.target.value)}
-                                className={styles.input}    
+                                className={styles.input}
                             />
                         </div>
                         <label>Cargo</label>
@@ -185,7 +202,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
                         </div>
                         <div className={styles.containerButtons}>
                             <button className={styles.btnCancel} onClick={onClose}>Cancelar</button>
-                            <button disabled={disabled} className={styles.btnConfirm} onClick={(e) => edit ? handleEditProfessional(e) : handleCreateProfessional(e)} >Concluído</button>
+                            <button disabled={disabled} className={styles.btnConfirm} onClick={(e) => edit ? handleEditProfessional(e, func.id) : handleCreateProfessional(e)} >Concluído</button>
                         </div>
                     </form>
                 </div>

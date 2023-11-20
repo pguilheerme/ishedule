@@ -69,7 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // tentar pegar algo no cookie
 
         getDataCompany()
-
+        
 
     }, [])
 
