@@ -1,13 +1,20 @@
 .headerContainer {
-    height: 5rem;   
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    background-color: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0;
+
 }
 
 .headerContent {
     max-width: 1120px;
     height: 5rem;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
-    margin-top: 1rem;
 
     display: flex;
     justify-content: space-between;
@@ -39,6 +46,5 @@
     }
     .focus{
         color: var(--other-red);
-        border-bottom: 1px solid var(--other-red);
     }
 }

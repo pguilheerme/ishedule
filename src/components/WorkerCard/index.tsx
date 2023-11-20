@@ -6,7 +6,7 @@ import { LuCalendarClock, LuPencil, LuTrash2 } from "react-icons/lu";
 import { BasicModal } from "../Modal";
 import { DraggableDialog } from "../Dialog";
 
-export function WorkerCard({ avatar, name, role, func }) {
+export function WorkerCard({ avatar, name, role, func}) {
   const [editModal, setEditModal] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
@@ -17,8 +17,6 @@ export function WorkerCard({ avatar, name, role, func }) {
     setEditModal(param)
     setOpenModal(true)
   }
-
-
   return (
     <>
     

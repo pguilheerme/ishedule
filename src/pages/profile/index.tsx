@@ -87,7 +87,7 @@ export default function Profile() {
           <div className={styles.avatar}>
             <div className={styles.labelAvatar}>
               <label htmlFor="inpAvatar">
-                <Image src={cameraAdd} alt="Camera add icon" width={20} className={styles.image} />
+                <Image src={cameraAdd} alt="Camera add icon" width={50} className={styles.image} />
               </label>
               <input
                 type="file"
