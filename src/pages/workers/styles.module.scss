@@ -32,6 +32,31 @@
     padding: 10px;
     border-radius: 0.5rem;
     color: #fff;
-    width: 100px
+    transition: filter 0.4s ease;
+    width: 100px;
+
+    &:hover {
+      filter: brightness(1.2);
+    }
+    
+  }
+}
+
+.noFunc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 4rem;
+
+  .imgError {
+    width: 500px;
+    height: 200px;
+  }
+
+  .textError {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 1rem;
   }
 }

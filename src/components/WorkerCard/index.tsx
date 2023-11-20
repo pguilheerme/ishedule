@@ -52,7 +52,7 @@ export function WorkerCard({ avatar, name, role, func}) {
       </div>
     </div>
         <BasicModal open={openModal} onClose={handleCloseModal} edit={editModal} func={func} />
-        <DraggableDialog open={openDialog} onClose={handleCloseDialog} />
+        <DraggableDialog open={openDialog} onClose={handleCloseDialog} id={func.id}/>
     </>
   )
 }

@@ -8,31 +8,40 @@ import { BasicModal } from "@/components/Modal";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
 import { AuthContext } from "@/contexts/AuthContext";
+import noFunc from '../../../public/noFunc.svg'
 
 export default function Workers() {
     const [openModal, setOpenModal] = useState(false)
     const handleCloseModal = () => setOpenModal(false)
     const { user } = useContext(AuthContext)
-    console.log(user)
 
     return (
-        <>
-            <Head>
-                <title>Profissionais | Ischedule</title>
-            </Head>
-            <div className={styles.containerCenter}>
-                <div className={styles.containerTop}>
-                    <p>Membros</p>
-                    <button className={styles.btnNew} onClick={() => setOpenModal(true)}>
-                        Novo
-                        <Image src={plus} alt="plus" width={20} />
-                    </button>
+            <>
+                <Head>
+                    <title>Profissionais | Ischedule</title>
+                </Head>
+                <div className={styles.containerCenter}>
+                    <div className={styles.containerTop}>
+                        <p>Membros</p>
+                        <button className={styles.btnNew} onClick={() => setOpenModal(true)}>
+                            Novo
+                            <Image src={plus} alt="plus" width={20} />
+                        </button>
+                    </div>
+                    {user?.professionals.length != 0 ?
+                        user?.professionals.map((e) =>
+                            <WorkerCard name={e.name} role={e.role} avatar={e.avatar_url} func={e} />
+                        )
+                        :
+                        <div className={styles.noFunc}>
+                            <Image src={noFunc} alt="image for there are no professionals" className={styles.imgError} />
+                            <p className={styles.textError}>Ainda não há funcionários registrados</p>
+                        </div>
+                    }
                 </div>
-                {user?.professionals.length != 0 && user?.professionals.map( (e) => <WorkerCard name={e.name} role={e.role} avatar={e.avatar_url} func={e} />)}
-            </div>
 
-            <BasicModal open={openModal} onClose={handleCloseModal}/>
-        </>
+                <BasicModal open={openModal} onClose={handleCloseModal} />
+            </>
     )
 }
 
