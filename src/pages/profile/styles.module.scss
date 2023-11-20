@@ -162,13 +162,7 @@
   flex-direction: column;
   min-width: 15rem;
   height: 12rem;
-  transition: all 0.2s;
   cursor: pointer;
-
-  &:hover {
-    opacity: 1;
-    transform: scale(1.05);
-  }
 
   .plusDiv{
     background: var(--gray-300);
@@ -178,6 +172,17 @@
     height: 90%;
     width: 90%;
     border-radius: 2rem; 
+    transition: all 0.2s;
+
+    button{
+      height: 100%;
+      width: 100%;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
   }
   
   span{

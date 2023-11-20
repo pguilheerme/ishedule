@@ -147,7 +147,9 @@ export default function Profile() {
         <div className={styles.menuServices}>
           <div className={styles.addService}>
             <div className={styles.plusDiv}>
-              <BsPlusLg color="#e83f5b" size={80} />
+              <button onClick={(e) => console.log("deu certo!")}>
+                <BsPlusLg color="#e83f5b" size={80} />
+              </button>   
             </div>
             <span>Adicionar novo serviço</span>
           </div>
