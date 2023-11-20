@@ -13,6 +13,8 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers';
+import { setupAPIClient } from "@/services/api";
+import { canSSRAuth } from "@/utils/canSSRAuth";
 
 export default function Profile() {
   const [openHour, setOpenHour] = useState<dayjs.Dayjs>();
@@ -201,10 +203,10 @@ export default function Profile() {
   );
 }
 
-// export const getServerSideProps = canSSRAuth(async (ctx) => {
-//     const apiClient = setupAPIClient(ctx)
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+    const apiClient = setupAPIClient(ctx)
 
-//     return {
-//         props: {}
-//     }
-// })
+    return {
+        props: {}
+    }
+})
