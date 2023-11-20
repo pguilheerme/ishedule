@@ -8,6 +8,9 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import todayIcon from "../../../public/todayIcon.svg";
 import searchIcon from "../../../public/searchIcon.svg";
+import calendarIcon from "../../../public/calendarIcon.svg";
+import { canSSRAuth } from "@/utils/canSSRAuth";
+import { setupAPIClient } from "@/services/api";
 
 export default function Schedule() {
   const [date, setDate] = useState<dayjs.Dayjs>();
@@ -133,10 +136,10 @@ export default function Schedule() {
   );
 }
 
-// export const getServerSideProps = canSSRAuth(async (ctx) => {
-//     const apiClient = setupAPIClient(ctx)
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+    const apiClient = setupAPIClient(ctx)
 
-//     return {
-//         props: {}
-//     }
-// })
+    return {
+        props: {}
+    }
+})
