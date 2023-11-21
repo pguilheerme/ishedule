@@ -69,7 +69,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
             return;
         }
 
-        if (image.type === "image/jpeg" || image.type === "image/png") {
+        if (image.type === "image/jpeg" || image.type === "image/png" || image.type === "image/jpg") {
             setImageAvatar(image);
             setAvatarUrl(URL.createObjectURL(e.target.files[0]));
         }
@@ -165,7 +165,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
                                 required
                                 type="file"
                                 id="inpAvatar"
-                                accept="image/png, image/jpeg"
+                                accept="image/png, image/jpeg, image/jpg"
                                 onChange={handleAvatarFile}
                             />
 
