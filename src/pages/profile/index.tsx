@@ -8,15 +8,17 @@ import { BsPlusLg } from "react-icons/bs";
 import { CiLock, CiUnlock } from "react-icons/ci";
 import { ServiceCard } from "../../components/ServiceCard";
 import pencil from '../../../public/pencilWhite.svg'
-
 import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers';
 import { setupAPIClient } from "@/services/api";
 import { canSSRAuth } from "@/utils/canSSRAuth";
+import { ModalService } from "@/components/ModalService";
 
 export default function Profile() {
+  const [openModal, setOpenModal] = useState(false)
+  const handleCloseModal = () => setOpenModal(false)
   const [openHour, setOpenHour] = useState<dayjs.Dayjs>();
   const [closedHour, setClosedHour] = useState<dayjs.Dayjs>();
 
@@ -147,9 +149,10 @@ export default function Profile() {
         <div className={styles.menuServices}>
           <div className={styles.addService}>
             <div className={styles.plusDiv}>
-              <button onClick={(e) => console.log("deu certo!")}>
+              <button onClick={() => setOpenModal(true)}>
                 <BsPlusLg color="#e83f5b" size={80} />
-              </button>   
+              </button>
+              <ModalService open={openModal} onClose={handleCloseModal}/>
             </div>
             <span>Adicionar novo serviço</span>
           </div>

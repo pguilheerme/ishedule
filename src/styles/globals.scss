@@ -108,3 +108,7 @@ body {
     background: var(--gray-400); 
   }
 }
+
+.p-inputtext .p-component .p-inputnumber-input .p-inputnumber-input {
+  border: none !important;
+}

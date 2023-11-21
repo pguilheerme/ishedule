@@ -51,8 +51,8 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
     try {
-        destroyCookie(undefined, '@firebase.token')
-        Router.push("/")
+        // destroyCookie(undefined, '@firebase.token')
+        // Router.push("/") 
     }
     catch (err) {
         console.log("Erro ao deslogar")
@@ -65,12 +65,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const isAuthenticated = !!user
 
     useEffect(() => {
-
         // tentar pegar algo no cookie
-
         getDataCompany()
-        
-
     }, [])
 
     function getDataCompany () {
