@@ -34,7 +34,7 @@
     margin-bottom: 8px;
 
     .allInput {
-        width: 90%;
+        width: 88%;
         height: 40px;
         border-radius: 8px;
         border: 1px solid #2F317C;
@@ -45,7 +45,7 @@
         align-items: center;
         justify-content: center;
         margin-bottom: 1rem;
-        margin-left: 1.5rem;
+        margin-left: 1.7rem;
 
         .input {
             all: unset;
@@ -59,7 +59,7 @@
         font-weight: 700;
         justify-content: flex-start;
         margin-bottom: 8px;
-        margin-left: 4rem;
+        margin-left: 2rem;
     }
 
     form {
@@ -109,10 +109,10 @@
         label {
             margin-right: 9rem;
             color: #1F2041;
-        font-size: 1.2rem;
-        font-weight: 700;
-        justify-content: flex-start;
-        margin-bottom: 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            justify-content: flex-start;
+            margin-bottom: 8px;
         }
 
         
@@ -141,12 +141,12 @@
     align-items: center;
     justify-content: flex-end;
     margin-top: 10px;
-    gap: 10px;
+    gap: 1rem;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 2px;
     padding-bottom: 2px;
-    padding: 5px;
+    padding: 5px 6%;
 
     .btnCancel {
         border: 1px solid var(--red);
@@ -226,6 +226,7 @@
     align-items: center;
     justify-content: center;
     margin-left: 8rem;
+    margin-top: 1rem;
     
 
     input {
@@ -256,6 +257,7 @@
         align-items: center;
         justify-content: center;
         margin-left: 8rem;
+        margin-top: 1rem;
       
         input {
             display: none;
