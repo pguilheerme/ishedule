@@ -24,11 +24,19 @@ type Professionals = {
     avatar_url: string
 }
 
+type ServiceProps = {
+    name: string,
+    background_img_url: string,
+    price: string,
+    estimated_time: string
+}
+
 type UserProps = {
     id: string,
     name?: string,
     email: string,
-    professionals?: Professionals[]
+    professionals?: Professionals[],
+    service?: ServiceProps[] 
 }
 
 type SignUpProps = {
@@ -51,8 +59,8 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
     try {
-        // destroyCookie(undefined, '@firebase.token')
-        // Router.push("/") 
+        destroyCookie(undefined, '@firebase.token')
+        Router.push("/") 
     }
     catch (err) {
         console.log("Erro ao deslogar")
