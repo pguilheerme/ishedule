@@ -111,14 +111,13 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
         e.preventDefault()
         setDisabled(true)
 
-
         try {
             let avatar_url: string | boolean = func.avatar_url
-            
+
             if (func.avatar_url != avatarUrl) {
                 avatar_url = await uploadAvatar(imageAvatar)
 
-                if(!avatar_url) {
+                if (!avatar_url) {
                     console.log('Error')
                     throw new Error()
                 }

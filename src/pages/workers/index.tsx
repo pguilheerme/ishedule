@@ -29,8 +29,9 @@ export default function Workers() {
                         </button>
                     </div>
                     {user?.professionals.length != 0 ?
-                        user?.professionals.map((e) =>
-                            <WorkerCard name={e.name} role={e.role} avatar={e.avatar_url} func={e} />
+                        user?.professionals.map((e, key) => {return(
+                            <WorkerCard name={e.name} role={e.role} avatar={e.avatar_url} func={e} key={key}/>
+                        )}
                         )
                         :
                         <div className={styles.noFunc}>

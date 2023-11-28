@@ -3,7 +3,7 @@
   margin: 3.5rem auto !important;
   justify-content: space-evenly;
 
-  .select{
+  .select {
     margin-top: 1rem;
     float: right;
   }
@@ -15,7 +15,7 @@
   position: relative;
   height: 280px;
 
-  .likes{
+  .likes {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--white);
@@ -26,7 +26,7 @@
     align-items: center;
     display: flex;
 
-    span{
+    span {
       margin-left: 5px;
     }
   }
@@ -39,33 +39,33 @@
     justify-content: center;
     align-items: center;
     color: var(--white);
-  
+
     .info {
       margin: 0 0 1rem 1rem;
       display: flex;
       justify-content: center;
       flex-direction: column;
 
-      input{
+      input {
         all: unset;
 
-        &::placeholder{
+        &::placeholder {
           color: var(--gray-400);
         }
       }
 
-      .inputName{
+      .inputName {
         font-size: 25px;
         font-weight: bold;
       }
 
-      .inputAdress{
+      .inputAdress {
         font-size: 15px;
         font-weight: bold;
       }
     }
   }
-  
+
 }
 
 .labelBanner {
@@ -74,6 +74,7 @@
   height: 280px;
   background-color: var(--gray-300);
 }
+
 .labelAvatar {
   border-radius: 50%;
   width: 5rem;
@@ -128,7 +129,7 @@
   width: 15rem;
   padding: 0.5rem 4rem 0.5rem 0.5rem;
   background: var(--arrow-icon) no-repeat right 0.8em center / 1.4em,
-  linear-gradient(to left, var(--dark-blue) 3em, var(--other-red) 3em);
+    linear-gradient(to left, var(--dark-blue) 3em, var(--other-red) 3em);
   color: var(--white);
   font-weight: bold;
   border-radius: 0.5em;
@@ -146,7 +147,8 @@
     color: #000;
   }
 }
-.menuServices{
+
+.menuServices {
   display: flex;
   margin-top: 4rem;
   max-width: 100vw;
@@ -155,7 +157,7 @@
   padding: 1rem 0;
 }
 
-.addService{
+.addService {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -164,17 +166,17 @@
   height: 12rem;
   cursor: pointer;
 
-  .plusDiv{
+  .plusDiv {
     background: var(--gray-300);
     display: flex;
     align-items: center;
     justify-content: center;
     height: 90%;
     width: 90%;
-    border-radius: 2rem; 
+    border-radius: 2rem;
     transition: all 0.2s;
 
-    button{
+    button {
       height: 100%;
       width: 100%;
       transition: transform 0.2s;
@@ -184,29 +186,29 @@
       }
     }
   }
-  
-  span{
+
+  span {
     margin-top: 0.5rem;
     font-weight: 700;
   }
 }
 
-.image{
+.image {
   cursor: pointer;
 }
 
-.menuTime{
+.menuTime {
   margin-top: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 
-  h2{
-    color: var(--purple); 
+  h2 {
+    color: var(--purple);
   }
 
-  .timesDiv{
+  .timesDiv {
     background: var(--purple);
     margin-top: 1rem;
     display: flex;
@@ -218,29 +220,36 @@
     flex-direction: column;
     gap: 4rem;
 
-    .time{
+    .time {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 5rem;
 
-      .timeRight{
+      .timeRight {
         margin-top: 2rem;
       }
 
-      h3{
+      h3 {
         margin-bottom: 0.5rem;
         color: var(--white);
       }
 
-      .bgClock{
+      .bgClock {
         display: flex;
         justify-content: center;
         align-items: center;
         color: var(--white);
         border-radius: 0.3rem;
-        background:rgba(255, 255, 255, 0.28);
-        outline: none !important; 
+        background: rgba(255, 255, 255, 0.28);
+        outline: none !important;
+        color: white;
+        border: 2px solid white;
+
+        input {
+          color: white !important;
+          font-weight: 700;
+        }
       }
     }
   }
@@ -253,35 +262,35 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  
+
 
   input {
-      display: none;
+    display: none;
   }
 
   label {
-      z-index: 99;
-      position: absolute;
-      opacity: 0;
-      transition: all 0.7s;
-      margin-top: 5px;
-      margin-right: 6.5px;
+    z-index: 99;
+    position: absolute;
+    opacity: 0;
+    transition: all 0.7s;
+    margin-top: 5px;
+    margin-right: 6.5px;
 
-      &:hover {
-          opacity: 1;
-          transform: scale(1.2);
-      }
+    &:hover {
+      opacity: 1;
+      transform: scale(1.2);
+    }
   }
 }
 
-.editAvatar{
+.editAvatar {
   border-radius: 50%;
   width: 5rem;
   height: 5rem;
   background-color: var(--gray-400);
 }
 
-.editBanner{
+.editBanner {
   border-radius: 3rem;
   width: 100%;
   height: 280px;

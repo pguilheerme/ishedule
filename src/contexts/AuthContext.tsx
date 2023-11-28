@@ -11,10 +11,11 @@ type AuthContextData = {
     isAuthenticated?: boolean,
     signInWithEmailAndPassword: (credentials: SignInProps) => Promise<void>
     signOut: () => void,
-    signUpWithEmailAndPassword: (credentials: SignUpProps) => Promise<void>
-    signUpWithGoogle: (credentials: SignUpProps) => Promise<void>
-    signInWithGoogle: () => Promise<void>
-    signInWithFacebook: () => Promise<void>
+    signUpWithEmailAndPassword: (credentials: SignUpProps) => Promise<void>,
+    signUpWithGoogle: (credentials: SignUpProps) => Promise<void>,
+    signUpWithFacebook: (credentials: SignUpProps) => Promise<void>,
+    signInWithGoogle: () => Promise<void>,
+    signInWithFacebook: () => Promise<void>,
     getDataCompany: () => void
 }
 
@@ -24,11 +25,19 @@ type Professionals = {
     avatar_url: string
 }
 
+type ServiceProps = {
+    name: string,
+    background_img_url: string,
+    price: string,
+    estimated_time: string
+}
+
 type UserProps = {
     id: string,
     name?: string,
     email: string,
-    professionals?: Professionals[]
+    professionals?: Professionals[],
+    service?: ServiceProps[] 
 }
 
 type SignUpProps = {
@@ -51,8 +60,8 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
     try {
-        // destroyCookie(undefined, '@firebase.token')
-        // Router.push("/") 
+        destroyCookie(undefined, '@firebase.token')
+        Router.push("/") 
     }
     catch (err) {
         console.log("Erro ao deslogar")
@@ -159,25 +168,65 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     }
 
+    async function signUpWithFacebook() {
+        try {
+            const provider = new firebase.auth.FacebookAuthProvider()
+            const result = await auth.signInWithPopup(provider)
+
+            if (result.user) {
+                const { email, uid, displayName } = result.user
+                const token = await result.user.getIdToken()
+
+
+                const response = await api.post('/user/company', {
+                    id: uid,
+                    email: email,
+                    name: displayName
+                },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+
+                )
+                console.log(response);
+
+                toast.success("Conta com o Facebook criada!")
+                Router.push("/")
+
+            }
+        } catch (error) {
+            toast.error("Erro ao criar conta com Facebook")
+            console.log(error)
+        }
+    }
+
     async function signInWithFacebook() {
         try {
             const provider = new firebase.auth.FacebookAuthProvider()
             const result = await auth.signInWithPopup(provider)
 
             if (result.user) {
-                const { email, uid } = result.user
+                const { email, uid, displayName } = result.user
                 const token = await result.user.getIdToken()
 
-                setCookie(undefined, '@firebase.token', token, {
+
+                const { data } = await api.get('/auth/company/signin', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+
+                api.defaults.headers["Authorization"] = `Bearer ${data.access_token}`
+                
+
+                setCookie(undefined, "@firebase.token", data.access_token, {
                     maxAge: 60 * 60 * 24 * 30, //expirar em 1 mes
                     path: "/" // quais caminhos terao acesso a cookie
                 })
 
-                api.defaults.headers["Authorization"] = `Bearer ${token}`
 
                 toast.success("Logado com sucesso!")
                 Router.push("/dashboard")
-
             }
         } catch (error) {
             toast.error("Erro ao acessar com Facebook!")
@@ -258,7 +307,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signUpWithGoogle, signUpWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithGoogle, signInWithFacebook, getDataCompany }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signUpWithFacebook,signUpWithGoogle, signUpWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithGoogle, signInWithFacebook, getDataCompany }}>
             {children}
         </AuthContext.Provider>
     )

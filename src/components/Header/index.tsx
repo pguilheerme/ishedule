@@ -7,13 +7,9 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 function Header() {
-  const [focus, setFocus] = useState("dashboard");
+  const [focus, setFocus] = useState('');
+  
   const router = useRouter();
-
-  useEffect(() => {
-    router.push("/dashboard");
-    setFocus("dashboard");
-  }, []);
 
   return (
     <header className={styles.headerContainer}>
