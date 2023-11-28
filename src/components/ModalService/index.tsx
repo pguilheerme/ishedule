@@ -10,6 +10,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { firebase } from '../../services/firebase'
 import { getDownloadURL } from 'firebase/storage'
 import { api } from '@/services/apiClient'
+import { toast } from 'react-toastify'
 
 
 type propsModalService = {
@@ -45,7 +46,7 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
             return;
         }
 
-        if (image.type === "image/jpeg" || image.type === "image/png") {
+        if (image.type === "image/jpeg" || image.type === "image/png" || image.type === "image/jpg") {
             setServiceAvatar(image);
             setServiceUrl(URL.createObjectURL(e.target.files[0]));
         }
@@ -87,8 +88,6 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
             })
 
             console.log(servicePrice)
-
-            console.log(response);
             
 
             getDataCompany()
@@ -99,7 +98,10 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
             onClose()
 
         } catch (error) {
+            toast.error('Erro ao criar serviço')
             console.log(error)
+        } finally {
+            setDisabled(false)
         }
     }
 
@@ -125,7 +127,7 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
                                 required
                                 type="file"
                                 id="inpServiceAvatar"
-                                accept="image/png, image/jpeg"
+                                accept="image/png, image/jpeg, image/jpg"
                                 onChange={handleServiceFile}
                             />
 
@@ -154,6 +156,7 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
                             <div className={styles.price_input}>
                                 <label>Preço</label>
                                 <InputNumber
+                                    required
                                     inputId='currency-brazil'
                                     value={servicePrice}
                                     onChange={(e) => setServicePrice(e.value)}
@@ -165,6 +168,7 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
                             <div className={styles.time_input}>
                                 <label>Tempo estimado</label>
                                 <input
+                                    required
                                     value={serviceTime}
                                     onChange={(e) => setServiceTime(e.target.value)}
                                     type="time"
