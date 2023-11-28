@@ -11,6 +11,7 @@ import searchIcon from "../../../public/searchIcon.svg";
 import calendarIcon from "../../../public/calendarIcon.svg";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 export default function Schedule() {
   const [date, setDate] = useState<dayjs.Dayjs>();
@@ -42,21 +43,32 @@ export default function Schedule() {
         <title>Agenda | Ischedule</title>
       </Head>
       <div className={styles.containerCenter}>
-
         <div className={styles.containerScheduleLeft}>
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
             adapterLocale="pt-br"
           >
             <div className={styles.scheduleContents}>
-              <h3>{formatDate}</h3>
+              <h4>{formatDate}</h4>
               <div className={styles.scheduleButtons}>
+                <button
+                  className={styles.btnSchedule}
+                  onClick={() => handleFormatDate(dayjs(date).subtract(1, 'month'))}
+                >
+                  <IoIosArrowBack />
+                </button>
                 <button
                   className={styles.btnSchedule}
                   onClick={() => handleFormatDate(dayjs(new Date()))}
                 >
                   <Image src={todayIcon} alt="today icon" width={20} />
                   Hoje
+                </button>
+                <button
+                  className={styles.btnSchedule}
+                  onClick={() => handleFormatDate(dayjs(date).add(1, 'month'))}
+                >
+                  <IoIosArrowForward />
                 </button>
               </div>
             </div>
@@ -100,13 +112,17 @@ export default function Schedule() {
             </div>
             <div className={styles.statusDate}>
               <p className={styles.dateForStatus}>
-                  {dayjs(date).format("DD/MM/YYYY")}
+                {dayjs(date).format("DD/MM/YYYY")}
               </p>
             </div>
             <div className={styles.statusContent}>
-              {
-                false ? "" : <p className={styles.warningNotEmptyRegisters}>Não há registros!</p>
-              }
+              {false ? (
+                ""
+              ) : (
+                <p className={styles.warningNotEmptyRegisters}>
+                  Não há registros!
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -130,16 +146,15 @@ export default function Schedule() {
             <p>Não há registros!</p>
           </div>
         </div>
-
       </div>
     </>
   );
 }
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-    const apiClient = setupAPIClient(ctx)
+  const apiClient = setupAPIClient(ctx);
 
-    return {
-        props: {}
-    }
-})
+  return {
+    props: {},
+  };
+});

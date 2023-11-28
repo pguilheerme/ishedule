@@ -89,10 +89,13 @@ body {
 }
 
 .css-16b5y55-MuiPickersLayout-contentWrapper {
-  height: 260px;
+  height: 250px;
 }
 .css-1q04gal-MuiDateCalendar-root {
   height: auto;
+}
+.css-nk89i7-MuiPickersCalendarHeader-root{
+  display: none;
 }
 
 ::-webkit-scrollbar {
