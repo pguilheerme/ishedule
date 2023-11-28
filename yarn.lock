@@ -1442,10 +1442,10 @@ postcss@8.4.31:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-primereact@^10.1.0:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/primereact/-/primereact-10.1.0.tgz#d9c15194ca1b36622ea54a72cfaeb221bfa65652"
-  integrity sha512-ELkLDu9kiFFNMUbC79cUkcpZhw8CFWAzt47220hRu4lq2MQ5V7p8SzDk+2j+sIja9H8ibUJqGFa5ZYIoiXn+wQ==
+primereact@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/primereact/-/primereact-10.2.1.tgz#34271559fcefd6f81a13c106196b3e826c5e2a06"
+  integrity sha512-F25053E1z+fod6V7AJ1Ix/DwSPkFQotk2+Idm0XkFsN+gQEywH7DgtbvNKpUA+LEq48h2+/WVK3D0V8IAm1Npg==
   dependencies:
     "@types/react-transition-group" "^4.4.1"
     react-transition-group "^4.4.1"
