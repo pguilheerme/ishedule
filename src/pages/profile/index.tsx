@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import styles from "./styles.module.scss";
 import Image from "next/image";
@@ -16,11 +16,6 @@ import { setupAPIClient } from "@/services/api";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { ModalService } from "@/components/ModalService";
 import { AuthContext } from "@/contexts/AuthContext";
-import Swiper from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 
 export default function Profile() {
@@ -41,7 +36,12 @@ export default function Profile() {
 
   const { user } = useContext(AuthContext)
 
+  const itens = [
+    user?.service.map((e, key) =>
+      <ServiceCard name={e.name} avatar={e.background_img_url} price={e.price} service={e} key={key} />
 
+    )
+  ]
 
   function handleBannerFile(e) {
     if (!e.target.files) {
@@ -81,7 +81,7 @@ export default function Profile() {
     setCategorySelected(e.target.value);
   }
 
- 
+
 
   return (
     <>
@@ -169,12 +169,9 @@ export default function Profile() {
             </div>
             <span>Adicionar novo serviço</span>
           </div>
+
           {user?.service ?
-            
-            user?.service.map((e, key) => {return(
-                <ServiceCard name={e.name} avatar={e.background_img_url} price={e.price} service={e} key={key}/>
-              )}
-              ) 
+            itens
             :
             <div className={styles.noServices}>
               <p>não há serviços</p>
