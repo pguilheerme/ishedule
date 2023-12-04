@@ -45,11 +45,6 @@
           justify-content: center;
           gap: 2.5px;
           cursor: pointer;
-  
-          & + .btnSchedule {
-            padding-left: 5px;
-            border-left: 1px solid var(--white);
-          }
         }
       }
   
