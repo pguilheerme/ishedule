@@ -41,6 +41,7 @@ export default function Profile() {
   const [services, setServices] = useState([]);
 
   const { user } = useContext(AuthContext)
+  const [disabled, setDisabled] = useState(true)
 
   const itens = [
     user?.service.map((e, key) =>
@@ -87,21 +88,31 @@ export default function Profile() {
     setCategorySelected(e.target.value);
   }
 
+  function buttonEditProfile() {
+    setDisabled(false)
+  }
+
   const handleSaveCompanyData = async (e) => {
     e.preventDefault()
+    try {  
+      const response = await api.post('/user/company', {
+        company_name: companyName,
+        address: companyAddress,
+        avatar_url: avatarUrl,
+        banner_url: bannerUrl
+      }, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+  
+      getDataCompany()
 
-    const response = await api.post('/user/company', {
-      company_name: companyName,
-      address: companyAddress,
-      avatar_url: avatarUrl,
-      banner_url: bannerUrl
-    }, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-
-    getDataCompany()
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
 
@@ -112,6 +123,9 @@ export default function Profile() {
         <title>Perfil | Ischedule</title>
       </Head>
       <div className={styles.containerCenter}>
+        <div className={styles.btnEditProfile}>
+          <button className={disabled ? styles.btnEdit : styles.btnEditDisabled} onClick={buttonEditProfile}><Image src={pencil} height={25} width={25} alt="pencil" className={styles.imgEditProfile} /></button>
+        </div>
         <div className={styles.headerProfile}>
           <div className={bannerUrl ? styles.editBanner : styles.labelBanner}>
             <label htmlFor="inpBanner">
@@ -122,7 +136,9 @@ export default function Profile() {
               id='inpBanner'
               accept="image/png, image/jpeg"
               onChange={handleBannerFile}
+              disabled={disabled}
             />
+
 
             {bannerUrl && (
               <Image
@@ -144,6 +160,7 @@ export default function Profile() {
                 id="inpAvatar"
                 accept="image/png, image/jpeg"
                 onChange={handleAvatarFile}
+                disabled={disabled}
               />
 
               {avatarUrl && (
@@ -157,8 +174,8 @@ export default function Profile() {
               )}
             </div>
             <div className={styles.info}>
-              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
-              <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)}/>
+              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={disabled} />
+              <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} disabled={disabled} />
             </div>
           </div>
           <label className={styles.likes}>
@@ -171,7 +188,7 @@ export default function Profile() {
           onChange={handleChangeCategory}
           className={styles.select}
         >
-          <option value="" selected disabled>
+          <option value="" selected>
             Editar categoria
           </option>
           {categories.map((item, index) => {
@@ -214,6 +231,7 @@ export default function Profile() {
                     onChange={(newValue) => setOpenHour(newValue)}
                     ampm={false}
                     className={styles.bgClock}
+                    disabled={disabled}
                   />
                 </LocalizationProvider>
               </div>
@@ -230,6 +248,7 @@ export default function Profile() {
                     onChange={(newValue) => setClosedHour(newValue)}
                     ampm={false}
                     className={styles.bgClock}
+                    disabled={disabled}
                   />
                 </LocalizationProvider>
               </div>
@@ -239,6 +258,14 @@ export default function Profile() {
             </div>
           </div>
         </div>
+        {disabled ?
+          ''
+          :
+          <div className={styles.btnProfileChanges}>
+            <button className={styles.btnCancel} onClick={() => setDisabled(true)}>Cancelar</button>
+            <button className={styles.btnConfirm} onClick={handleSaveCompanyData}>Salvar alterações</button>
+          </div>
+        }
       </div>
     </>
   );
