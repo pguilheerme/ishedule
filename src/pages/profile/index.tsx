@@ -16,9 +16,13 @@ import { setupAPIClient } from "@/services/api";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { ModalService } from "@/components/ModalService";
 import { AuthContext } from "@/contexts/AuthContext";
+import { api } from "@/services/apiClient";
+import { parseCookies } from "nookies";
 
 
 export default function Profile() {
+  const { getDataCompany } = useContext(AuthContext)
+  const { '@firebase.token': token } = parseCookies()
   const [openModal, setOpenModal] = useState(false)
   const handleCloseModal = () => setOpenModal(false)
   const [openHour, setOpenHour] = useState<dayjs.Dayjs>();
@@ -28,6 +32,8 @@ export default function Profile() {
   const [imageBanner, setImageBanner] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [imageAvatar, setImageAvatar] = useState(null);
+  const [companyName, setCompanyName] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
 
   const [categories, setCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState("");
@@ -79,6 +85,23 @@ export default function Profile() {
 
   function handleChangeCategory(e) {
     setCategorySelected(e.target.value);
+  }
+
+  const handleSaveCompanyData = async (e) => {
+    e.preventDefault()
+
+    const response = await api.post('/user/company', {
+      company_name: companyName,
+      address: companyAddress,
+      avatar_url: avatarUrl,
+      banner_url: bannerUrl
+    }, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    getDataCompany()
   }
 
 
@@ -134,8 +157,8 @@ export default function Profile() {
               )}
             </div>
             <div className={styles.info}>
-              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" />
-              <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" />
+              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
+              <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)}/>
             </div>
           </div>
           <label className={styles.likes}>
