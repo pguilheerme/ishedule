@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 
 function Header() {
   const [focus, setFocus] = useState('');
-  
   const router = useRouter();
 
   return (

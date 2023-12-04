@@ -9,6 +9,11 @@
   cursor: pointer;
   position: relative;
 
+  button{
+    all: inherit;
+    cursor: pointer;
+  }
+
   &:hover {
     opacity: 1;
     transform: scale(1.05);

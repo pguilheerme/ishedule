@@ -14,4 +14,9 @@
         all: unset;
         flex: 1
     }
+
+    button{
+        all: inherit;
+        cursor: pointer;
+    }
 }

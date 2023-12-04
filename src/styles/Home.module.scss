@@ -4,6 +4,11 @@
   align-items: stretch;
   height: 100vh;
 
+  button{
+    all: inherit;
+    cursor: pointer;
+}
+
   aside{
       flex: 10;
         display: flex;
