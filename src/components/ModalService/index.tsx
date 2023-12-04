@@ -1,7 +1,7 @@
 import Modal from '@mui/material/Modal'
 import { AuthContext } from "@/contexts/AuthContext"
 import { parseCookies } from "nookies"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import styles from './styles.module.scss'
 import Image from 'next/image'
 import pencil from '../../../public/pencilWhite.svg'
@@ -12,15 +12,15 @@ import { getDownloadURL } from 'firebase/storage'
 import { api } from '@/services/apiClient'
 import { toast } from 'react-toastify'
 
-
 type propsModalService = {
     open: boolean,
     edit?: boolean,
     service?: {
+        id:string,
         name: string,
         price: number,
         estimated_time: string,
-        background_image_url: string,
+        background_img_url: string,
     }
     onClose: () => void,
 }
@@ -35,22 +35,15 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
     const [serviceUrl, setServiceUrl] = useState('')
     const [disabled, setDisabled] = useState(false);
 
-    function handleServiceFile(e) {
-        if (!e.target.files) {
-            return;
+    useEffect(() => {
+        if(service) {
+            setServiceUrl(service.background_img_url)
+            setServiceName(service.name)
+            setServicePrice(service.price)
+            setServiceTime(service.estimated_time)
         }
-
-        const image = e.target.files[0];
-
-        if (!image) {
-            return;
-        }
-
-        if (image.type === "image/jpeg" || image.type === "image/png" || image.type === "image/jpg") {
-            setServiceAvatar(image);
-            setServiceUrl(URL.createObjectURL(e.target.files[0]));
-        }
-    }
+    },[onClose])
+    
 
     async function uploadServiceAvatar(image: File) {
 
@@ -69,17 +62,36 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
         }
     }
 
+    function handleServiceFile(e) {
+        if (!e.target.files) {
+            return;
+        }
+
+        const image = e.target.files[0];
+
+        if (!image) {
+            return;
+        }
+
+        if (image.type === "image/jpeg" || image.type === "image/png" || image.type === "image/jpg") {
+            setServiceAvatar(image);
+            setServiceUrl(URL.createObjectURL(e.target.files[0]));
+        }
+    }
+
+    
+
     const handleCreateService = async (e) => {
         setDisabled(true)
         e.preventDefault()
         try {
             
-            const serviceUrl = await uploadServiceAvatar(serviceAvatar)
+            const background_image_url = await uploadServiceAvatar(serviceAvatar)
 
             const response = await api.post('/services-company', {
                 name: serviceName,
                 price: String(servicePrice),
-                background_img_url: serviceUrl,
+                background_img_url: background_image_url,
                 estimated_time: serviceTime
             }, {
                 headers: {
@@ -104,6 +116,46 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
             setDisabled(false)
         }
     }
+
+    const handleEditService = async (e, id: string) => {
+        e.preventDefault()
+        setDisabled(true)
+
+        try {
+            let background_img_url: string | boolean = service.background_img_url
+
+            if(service.background_img_url != serviceUrl) {
+                background_img_url = await uploadServiceAvatar(serviceAvatar)
+
+                if(!background_img_url) {
+                    console.log('Error')
+                    throw new Error()
+                }
+            }
+
+            const response = await api.put(`/services-company/${id}`, {
+                name: serviceName,
+                price: String(servicePrice),
+                background_img_url: background_img_url,
+                estimated_time: serviceTime
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+
+            getDataCompany()
+            onClose()
+
+        } catch (error) {
+            toast.error("Erro ao editar serviço")
+            console.log(error);
+        } finally {
+            setDisabled(false)
+        }
+    }
+
+    
 
 
     return (
@@ -150,6 +202,7 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
                                 value={serviceName}
                                 onChange={(e) => setServiceName(e.target.value)}
                                 className={styles.input}
+                                maxLength={28}
                             />
                         </div>
                         <div className={styles.otherInputs}>
@@ -178,7 +231,7 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
 
                         <div className={styles.containerButtons}>
                             <button className={styles.btnCancel} onClick={onClose}>Cancelar</button>
-                            <button disabled={disabled} className={styles.btnConfirm} onClick={(e) => handleCreateService(e)} >Concluído</button>
+                            <button disabled={disabled} className={styles.btnConfirm} onClick={(e) => edit ? handleEditService(e, service.id) : handleCreateService(e) } >Concluído</button>
                         </div>
                     </form>
                 </div>

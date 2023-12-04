@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 import { AuthContext } from '@/contexts/AuthContext'
 
 export default function SignUp() {
-    const { signUpWithEmailAndPassword, signUpWithGoogle, user } = useContext(AuthContext)
+    const { signUpWithEmailAndPassword, signUpWithGoogle, signUpWithFacebook, user } = useContext(AuthContext)
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -21,6 +21,15 @@ export default function SignUp() {
     const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+    async function handleSignUpWithFacebook() {
+        if (!user) {
+            await signUpWithFacebook({
+                ...form,
+                name: form.name
+            })
+        }
+    }
 
     async function handleSignUp(event: FormEvent) {
         event.preventDefault()
@@ -113,7 +122,7 @@ export default function SignUp() {
                 <button className={styles.btnGoogle} onClick={handleSignUpWithGoogle}>
                     <Image src={googleIconImg} alt="imagem do google" />
                 </button>
-                <button className={styles.btnFacebook}>
+                <button className={styles.btnFacebook} onClick={handleSignUpWithFacebook}>
                     <Image src={facebookIconImg} alt="imagem do facebook" />
                 </button>
             </div>

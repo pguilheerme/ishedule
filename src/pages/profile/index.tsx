@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import styles from "./styles.module.scss";
 import Image from "next/image";
@@ -15,6 +15,8 @@ import { TimePicker } from '@mui/x-date-pickers';
 import { setupAPIClient } from "@/services/api";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { ModalService } from "@/components/ModalService";
+import { AuthContext } from "@/contexts/AuthContext";
+
 
 export default function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -31,6 +33,15 @@ export default function Profile() {
   const [categorySelected, setCategorySelected] = useState("");
 
   const [services, setServices] = useState([]);
+
+  const { user } = useContext(AuthContext)
+
+  const itens = [
+    user?.service.map((e, key) =>
+      <ServiceCard name={e.name} avatar={e.background_img_url} price={e.price} service={e} key={key} />
+
+    )
+  ]
 
   function handleBannerFile(e) {
     if (!e.target.files) {
@@ -70,6 +81,8 @@ export default function Profile() {
     setCategorySelected(e.target.value);
   }
 
+
+
   return (
     <>
       <Head>
@@ -77,9 +90,9 @@ export default function Profile() {
       </Head>
       <div className={styles.containerCenter}>
         <div className={styles.headerProfile}>
-          <div className={bannerUrl? styles.editBanner : styles.labelBanner}>
+          <div className={bannerUrl ? styles.editBanner : styles.labelBanner}>
             <label htmlFor="inpBanner">
-              <Image src={bannerUrl? pencil : cameraAdd} alt="Camera add icon" width={60} className={styles.image} />
+              <Image src={bannerUrl ? pencil : cameraAdd} alt="Camera add icon" width={60} className={styles.image} />
             </label>
             <input
               type="file"
@@ -99,9 +112,9 @@ export default function Profile() {
             )}
           </div>
           <div className={styles.avatar}>
-            <div className={avatarUrl? styles.editAvatar : styles.labelAvatar}>
+            <div className={avatarUrl ? styles.editAvatar : styles.labelAvatar}>
               <label htmlFor="inpAvatar">
-                <Image src={avatarUrl? pencil : cameraAdd} alt="Camera add icon" width={40} className={styles.image} />
+                <Image src={avatarUrl ? pencil : cameraAdd} alt="Camera add icon" width={40} className={styles.image} />
               </label>
               <input
                 type="file"
@@ -121,7 +134,7 @@ export default function Profile() {
               )}
             </div>
             <div className={styles.info}>
-              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" />  
+              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" />
               <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" />
             </div>
           </div>
@@ -152,19 +165,19 @@ export default function Profile() {
               <button onClick={() => setOpenModal(true)}>
                 <BsPlusLg color="#e83f5b" size={80} />
               </button>
-              <ModalService open={openModal} onClose={handleCloseModal}/>
+              <ModalService open={openModal} onClose={handleCloseModal} />
             </div>
             <span>Adicionar novo serviço</span>
           </div>
-          <ServiceCard name="Nome do serviço" />
-          <ServiceCard name="Nome do serviço" />
-          <ServiceCard name="Nome do serviço" />
-          <ServiceCard name="Nome do serviço" />
-          <ServiceCard name="Nome do serviço" />
-          <ServiceCard name="Nome do serviço" />
-          <ServiceCard name="Nome do serviço" />
-          <ServiceCard name="Nome do serviço" />
-          {/* {services.map((item, index) => ())}  */}
+
+          {user?.service ?
+            itens
+            :
+            <div className={styles.noServices}>
+              <p>não há serviços</p>
+            </div>
+          }
+
         </div>
         <div className={styles.menuTime}>
           <h2>Horário de Abertura e Fechamento</h2>
@@ -173,12 +186,12 @@ export default function Profile() {
               <div className={styles.timeLeft}>
                 <h3>Abertura</h3>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker 
+                  <TimePicker
                     value={openHour}
-                    onChange={(newValue) => setOpenHour(newValue)} 
+                    onChange={(newValue) => setOpenHour(newValue)}
                     ampm={false}
-                    className={styles.bgClock} 
-                    />
+                    className={styles.bgClock}
+                  />
                 </LocalizationProvider>
               </div>
               <div className={styles.timeRight}>
@@ -189,12 +202,12 @@ export default function Profile() {
               <div className={styles.timeLeft}>
                 <h3>Fechamento</h3>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
+                  <TimePicker
                     value={closedHour}
                     onChange={(newValue) => setClosedHour(newValue)}
-                    ampm={false} 
+                    ampm={false}
                     className={styles.bgClock}
-                    />
+                  />
                 </LocalizationProvider>
               </div>
               <div className={styles.timeRight}>
@@ -209,9 +222,9 @@ export default function Profile() {
 }
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-    const apiClient = setupAPIClient(ctx)
+  const apiClient = setupAPIClient(ctx)
 
-    return {
-        props: {}
-    }
+  return {
+    props: {}
+  }
 })
