@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import todayIcon from "../../../public/todayIcon.svg";
 import searchIcon from "../../../public/searchIcon.svg";
-import calendarIcon from "../../../public/calendarIcon.svg";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -79,6 +78,7 @@ export default function Schedule() {
               value={date}
               onChange={(day: dayjs.Dayjs) => handleFormatDate(day)}
               defaultValue={dayjs(date)}
+              dayOfWeekFormatter={(_day, weekday) => `${weekday.format('ddd')}`}
             />
           </LocalizationProvider>
           <div className={styles.statusList}>

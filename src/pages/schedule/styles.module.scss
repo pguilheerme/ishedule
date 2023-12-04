@@ -1,197 +1,201 @@
 .containerCenter {
+  display: flex;
+  width: 70vw;
+  margin: 3.5rem auto !important;
+  justify-content: space-evenly;
+  gap: 1rem;
+
+  .containerScheduleLeft {
+    position: relative;
+    height: 100%;
     display: flex;
-    width: 70vw;
-    margin: 3.5rem auto !important;
-    justify-content: space-evenly;
-    gap: 1rem;
-  
-    .containerScheduleLeft {
-      position: relative;
-      height: 100%;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    .scheduleContents {
+      width: 90%;
+      position: absolute;
+      z-index: 99;
+      right: 10px;
+      top: 13px;
+      color: var(--white);
+      justify-content: space-between;
       display: flex;
-      flex-flow: column;
-      justify-content: flex-start;
       align-items: center;
-  
-      .scheduleContents {
-        width: 90%;
-        position: absolute;
-        z-index: 99;
-        right: 10px;
-        top: 13px;
-        color: var(--white);
+
+      .scheduleButtons {
+        display: flex;
         justify-content: space-between;
+        align-items: center;
+      }
+
+      .btnSchedule {
+        margin-left: 10px;
+        font-size: 1rem;
+        font-weight: 500;
         display: flex;
         align-items: center;
-  
-        .scheduleButtons {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-  
-        .btnSchedule {
-          margin-left: 10px;
-          font-size: 1rem;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 2.5px;
-          cursor: pointer;
-  
-          & + .btnSchedule {
-            padding-left: 5px;
-            border-left: 1px solid var(--white);
-          }
-        }
+        justify-content: center;
+        gap: 2.5px;
+        cursor: pointer;
       }
-  
-      .statusList {
-        width: 100%;
-        margin-top: 10px;
+    }
+
+    .statusList {
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      filter: drop-shadow(16px 4px 8px rgba(0, 0, 0, 0.08));
+      flex: 1;
+
+      .statusHeader {
+        gap: 1rem;
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
-        filter: drop-shadow(16px 4px 8px rgba(0, 0, 0, 0.08));
-        flex: 1;
-  
-        .statusHeader {
-          gap: 1rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: var(--white);
-          height: 2rem;
-          width: 100%;
-          display: flex;
-  
-          .focus {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--purple);
-            border-radius: 3px;
-            box-sizing: border-box;
-            font-weight: 500;
-            max-width: 100%;
-            height: 1.2rem;
-            padding: 5px 12px;
-            width: 5rem;
-            font-size: 13px;
-            color: var(--white);
-            margin: 5px;
-            font-weight: 450;
-          }
+        background: var(--white);
+        height: 2rem;
+        width: 100%;
+        display: flex;
 
-          .btnStatus {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--gray-400);
-            border-radius: 3px;
-            box-sizing: border-box;
-            font-weight: 500;
-            max-width: 100%;
-            height: 1.2rem;
-            padding: 5px 12px;
-            width: 5rem;
-            font-size: 13px;
-            color: var(--dark-blue);
-            margin: 5px;
-            font-weight: 450;
-          }
-        }
-
-        .statusDate {
-          background: linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.00) 100%), rgba(47, 49, 124, 0.81);
-          width: 100%;
-          padding: .7rem;
-          padding-left: 1.5rem;
-          padding-bottom: 0;
-
-          .dateForStatus{
-            color: #fff;
-            font-size: .7rem;
-            font-weight: 500;
-          }
-        }
-  
-        .statusContent {
+        .focus {
+          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.00) 100%), rgba(47, 49, 124, 0.81);
-          width: 100%;
-          min-height: 50px;
-          flex: 1;
+          background: var(--purple);
+          border-radius: 3px;
+          box-sizing: border-box;
+          font-weight: 500;
+          max-width: 100%;
+          height: 1.2rem;
+          padding: 5px 12px;
+          width: 5rem;
+          font-size: 13px;
+          color: var(--white);
+          margin: 5px;
+          font-weight: 450;
         }
 
-        .warningNotEmptyRegisters {
-          color: white;
-          font-weight: bold;
+        .btnStatus {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--gray-400);
+          border-radius: 3px;
+          box-sizing: border-box;
+          font-weight: 500;
+          max-width: 100%;
+          height: 1.2rem;
+          padding: 5px 12px;
+          width: 5rem;
+          font-size: 13px;
+          color: var(--dark-blue);
+          margin: 5px;
+          font-weight: 450;
         }
       }
-    }
-  
-    .containerScheduleRight {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-flow: column;
-      border-radius: 12px;
-      background: #fff;
-      width: 30%;
-      min-width: 300px;
-      height: 100%;
 
-      .rigthScheduleContent {
-        padding: 4px 0;
+      .statusDate {
+        background: linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0) 100%
+          ),
+          rgba(47, 49, 124, 0.81);
+        width: 100%;
+        padding: 0.7rem;
+        padding-left: 1.5rem;
+        padding-bottom: 0;
+
+        .dateForStatus {
+          color: #fff;
+          font-size: 0.7rem;
+          font-weight: 500;
+        }
       }
-  
-      .scheduleTop {
-        padding: 0.75rem;
-        width: 90%;
+
+      .statusContent {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        border-bottom: 1.5px solid var(--gray-400);
-  
-        .fixed {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 0;
-  
-          .scheduleTitle {
-            color: var(--dark-blue);
-            font-weight: 700;
-            font-size: 1.8rem;
-          }
-  
-          .dateSchedule {
-            color: var(--other-red);
-            font-weight: 700;
-          }
+        justify-content: center;
+        background: linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0) 100%
+          ),
+          rgba(47, 49, 124, 0.81);
+        width: 100%;
+        min-height: 50px;
+        flex: 1;
+      }
+
+      .warningNotEmptyRegisters {
+        color: white;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .containerScheduleRight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    border-radius: 12px;
+    background: #fff;
+    width: 30%;
+    min-width: 300px;
+    height: 100%;
+
+    .rigthScheduleContent {
+      padding: 4px 0;
+    }
+
+    .scheduleTop {
+      padding: 0.75rem;
+      width: 90%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid var(--gray-400);
+
+      .fixed {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+
+        .scheduleTitle {
+          color: var(--dark-blue);
+          font-weight: 700;
+          font-size: 1.8rem;
         }
-  
-        button {
-          cursor: pointer;
-          padding: 0;
-          margin: 0;
+
+        .dateSchedule {
+          color: var(--other-red);
+          font-weight: 700;
+        }
+      }
+
+      button {
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        width: 30px;
+        height: 30px;
+        border: none;
+
+        .btnSearch {
           width: 30px;
           height: 30px;
-          border: none;
-  
-          .btnSearch {
-            width: 30px;
-            height: 30px;
-          }
         }
       }
     }
   }
-  
+}
