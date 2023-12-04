@@ -4,6 +4,11 @@
   margin: 3.5rem auto !important;
   justify-content: space-evenly;
   flex-direction: column;
+
+  button{
+    all: inherit;
+    cursor: pointer;
+}
 }
 
 .containerTop {

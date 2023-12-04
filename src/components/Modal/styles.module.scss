@@ -7,6 +7,11 @@
     border-radius: 5px;
     filter: drop-shadow(20px 15px 8px rgba(0, 0, 0, 0.20));
     width: 500px;
+
+    button{
+        all: inherit;
+        cursor: pointer;
+    }
 }
 
 .containerHeader {

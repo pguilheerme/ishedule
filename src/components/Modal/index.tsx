@@ -98,6 +98,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
             setFuncName('')
             setFuncRole('')
             onClose()
+            toast.success('Profissional adicionado com sucesso')
 
         } catch (error) {
             toast.error('Erro ao criar funcionário')
@@ -135,6 +136,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
 
             getDataCompany()
             onClose()
+            toast.success('Profissional editado com sucesso')
 
         } catch (error) {
             toast.error('Erro ao editar funcionário')

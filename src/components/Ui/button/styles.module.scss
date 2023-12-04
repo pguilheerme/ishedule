@@ -26,6 +26,11 @@
             animation: animate 2s infinite;
         }
     }
+
+    button{
+        all: inherit;
+        cursor: pointer;
+    }
 }
 
 @keyframes animate {
