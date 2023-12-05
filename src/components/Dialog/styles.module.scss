@@ -28,6 +28,7 @@
         border: 1px solid #2F317C;
         transition: filter 0.3s ease;
         padding: 5px;
+        cursor: pointer;
 
         &:hover{
             filter: brightness(1.20);
@@ -42,6 +43,7 @@
         transition: 0.3s ease;
         font-weight: 500;
         padding: 5px;
+        cursor: pointer;
 
         &:hover{
             background: var(--red);
