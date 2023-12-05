@@ -19,6 +19,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  ResponsiveContainer
 } from "recharts";
 
 export default function Dashboard() {
@@ -174,7 +175,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className={styles.containerDown}>
-          <div className={styles.containerChart}>
+        <ResponsiveContainer className={styles.containerChart} width={700}>
             <AreaChart
               width={700}
               height={230}
@@ -210,7 +211,7 @@ export default function Dashboard() {
                 fill="url(#colorPv)"
               />
             </AreaChart>
-          </div>
+          </ResponsiveContainer>
           <div className={styles.containerList}>
             <div className={styles.listTitle}>
               <h3>Atendentes de hoje</h3>
@@ -223,9 +224,14 @@ export default function Dashboard() {
               <p>Ainda não há funcionários registrados</p>
             )}
           </div>
-          <button className={styles.btnList}>
+          {user?.professionals.length >= 6 ? 
+          (<button className={styles.btnList}>
             <BiArrowToBottom size={30} color="#2F317C" />
-          </button>
+          </button>)
+          :
+          ""
+        }
+          
         </div>
       </div>
     </>
