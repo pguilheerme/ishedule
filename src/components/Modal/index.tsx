@@ -32,7 +32,7 @@ export function BasicModal({ open, onClose, edit = false, func }: propsModal) {
     const [avatarUrl, setAvatarUrl] = useState("");
     const [disabled, setDisabled] = useState(false);
 
-
+    
     useEffect(() => {
         if (func) {
             setAvatarUrl(func.avatar_url)
