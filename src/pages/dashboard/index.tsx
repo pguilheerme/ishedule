@@ -4,7 +4,13 @@ import { canSSRAuth } from "@/utils/canSSRAuth";
 import styles from "./styles.module.scss";
 import Head from "next/head";
 import dayjs from "dayjs";
-import { BiBulb, BiBookmark, BiBody, BiGroup } from "react-icons/bi";
+import {
+  BiBulb,
+  BiBookmark,
+  BiBody,
+  BiGroup,
+  BiArrowToBottom,
+} from "react-icons/bi";
 import { AuthContext } from "@/contexts/AuthContext";
 import {
   Area,
@@ -211,12 +217,15 @@ export default function Dashboard() {
             </div>
             {user?.professionals.length != 0 ? (
               user?.professionals.map((e, key) => {
-                return <p>{e.name}</p>;
+                return <><p>{e.name}</p></>;
               })
             ) : (
               <p>Ainda não há funcionários registrados</p>
             )}
           </div>
+          <button className={styles.btnList}>
+            <BiArrowToBottom size={30} color="#2F317C" />
+          </button>
         </div>
       </div>
     </>
