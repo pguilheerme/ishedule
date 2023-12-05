@@ -18,6 +18,11 @@ import { ModalService } from "@/components/ModalService";
 import { AuthContext } from "@/contexts/AuthContext";
 import { api } from "@/services/apiClient";
 import { parseCookies } from "nookies";
+import { FaChevronDown } from "react-icons/fa";
+import { getDownloadURL } from "firebase/storage";
+import {firebase} from '../../services/firebase'
+import { toast } from "react-toastify";
+
 
 type PropsDataCompany = {
   company?: {
@@ -102,6 +107,40 @@ export default function Profile({ company }: PropsDataCompany) {
     }
   }
 
+  async function uploadCompanyAvatar(image: File) {
+
+    try {
+      const randomId = Math.floor(Math.random() * 99999999 + 1);
+
+      const storageRef = firebase.storage().ref().child(`avatarCompany/${randomId}-${image.name}`)
+      const snapshot = await storageRef.put(image)
+
+      const url = await getDownloadURL(snapshot.ref)
+      return url
+
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  }
+
+  async function uploadCompanyBanner(image: File) {
+
+    try {
+      const randomId = Math.floor(Math.random() * 99999999 + 1);
+
+      const storageRef = firebase.storage().ref().child(`bannerCompany/${randomId}-${image.name}`)
+      const snapshot = await storageRef.put(image)
+
+      const url = await getDownloadURL(snapshot.ref)
+      return url
+
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  }
+
   function handleChangeCategory(e) {
     setCategorySelected(e.target.value);
   }
@@ -112,26 +151,33 @@ export default function Profile({ company }: PropsDataCompany) {
 
   const handleSaveCompanyData = async (e) => {
     e.preventDefault()
-    try {  
-      console.log(token);
+    try {
       
-      // const response = await api.post('/user/company', {
-      //   company_name: companyName,
-      //   address: companyAddress,
-      //   avatar_url: avatarUrl,
-      //   banner_url: bannerUrl,
-      //   closing_time: closedHour,
-      //   opening_time: openHour
-      // }, {
-      //   headers: {
-      //     "Authorization": `Bearer ${token}`
-      //   }
-      // }
-      // )
+      const avatar_url = await uploadCompanyAvatar(imageAvatar)
+      const banner_url = await uploadCompanyBanner(imageBanner)
+
+      const response = await api.patch('/user/company', {
+        company_name: companyName,
+        address: companyAddress,
+        avatar_url: avatar_url,
+        banner_url: banner_url,
+        closing_time: String(closedHour),
+        opening_time: String(openHour)
+      }, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
+      )
+
+      getDataCompany()
     } catch (error) {
       console.log(error)
     }
-    
+    finally{
+      setDisabled(true)
+    }
+
   }
 
 
@@ -142,6 +188,13 @@ export default function Profile({ company }: PropsDataCompany) {
         <title>Perfil | Ischedule</title>
       </Head>
       <div className={styles.containerCenter}>
+        {/* {disabled ?
+          ""
+        :
+        <div className={}>
+          <button className={styles.btnDownArrow}><FaChevronDown color= {'#000'}/></button> 
+        </div>
+      } */}
         <div className={styles.btnEditProfile}>
           <button className={disabled ? styles.btnEdit : styles.btnEditDisabled} onClick={buttonEditProfile}><Image src={pencil} height={25} width={25} alt="pencil" className={styles.imgEditProfile} /></button>
         </div>
