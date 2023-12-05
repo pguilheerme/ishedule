@@ -19,6 +19,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  ResponsiveContainer
 } from "recharts";
 
 export default function Dashboard() {
@@ -174,30 +175,63 @@ export default function Dashboard() {
           </div>
         </div>
         <div className={styles.containerDown}>
-          <div className={styles.containerChart}>
-            {/* gráfico */}
-          </div>
+        <ResponsiveContainer className={styles.containerChart} width={700}>
+            <AreaChart
+              width={700}
+              height={230}
+              data={data}
+              margin={{ top: 30, right: 50, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#2F317C" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#2F317C" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#c31c5a" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#c31c5a" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="uv"
+                stroke="#2F317C"
+                fillOpacity={1}
+                fill="url(#colorUv)"
+              />
+              <Area
+                type="monotone"
+                dataKey="pv"
+                stroke="#c31c5a"
+                fillOpacity={1}
+                fill="url(#colorPv)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
           <div className={styles.containerList}>
             <div className={styles.listTitle}>
               <h3>Atendentes de hoje</h3>
             </div>
             {user?.professionals.length != 0 ? (
               user?.professionals.map((e, key) => {
-                return (
-                  <div className={styles.funcListToday} key={key}>
-                    <p>{e.name}</p>
-                  </div>
-                );
+                return <><p>{e.name}</p></>;
               })
             ) : (
-              <div className={styles.noFunc}>
-                <p>Ainda não há funcionários registrados</p>
-              </div>
+              <p>Ainda não há funcionários registrados</p>
             )}
           </div>
-          <button className={styles.btnList}>
+          {user?.professionals.length >= 6 ? 
+          (<button className={styles.btnList}>
             <BiArrowToBottom size={30} color="#2F317C" />
-          </button>
+          </button>)
+          :
+          ""
+        }
+          
         </div>
       </div>
     </>
