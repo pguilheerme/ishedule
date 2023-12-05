@@ -1,7 +1,7 @@
 .dialogBody {
     width: 350px;
     height: 50px;
-    padding: 8px;
+    padding: 10px;
 
     p {
         text-align: center;
@@ -17,7 +17,7 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 10px;
     padding: 5px;
 
@@ -27,6 +27,7 @@
         color: white;
         border: 1px solid #2F317C;
         transition: filter 0.3s ease;
+        padding: 5px;
 
         &:hover{
             filter: brightness(1.20);
@@ -40,6 +41,7 @@
         border-radius: 5px;
         transition: 0.3s ease;
         font-weight: 500;
+        padding: 5px;
 
         &:hover{
             background: var(--red);
