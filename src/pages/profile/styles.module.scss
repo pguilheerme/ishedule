@@ -376,3 +376,11 @@
     }
 }
 }
+
+.btnDownArrow {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background: var(--other-red);
+  border: 1px solid red;
+}
