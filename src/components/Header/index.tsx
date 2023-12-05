@@ -25,7 +25,7 @@ function Header() {
             }}
           >
             <p className={focus === "dashboard" && styles.focus}>
-              Tela inicial
+              Dashboard
             </p>
           </button>
           <button

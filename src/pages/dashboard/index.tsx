@@ -133,7 +133,7 @@ export default function Dashboard() {
       </Head>
       <div className={styles.containerCenter}>
         <div className={styles.containerHeader}>
-          <h2 className={styles.scheduleTitle}>Agenda</h2>
+          <h2 className={styles.scheduleTitle}>Visão geral</h2>
           <p className={styles.dateForStatus}>{formatDate}</p>
         </div>
         <div className={styles.containerUp}>
