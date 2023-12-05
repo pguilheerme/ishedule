@@ -1,7 +1,12 @@
 .containerCenter {
   width: 70vw;
-  margin: 3.5rem auto !important;
+  margin: 3rem auto !important;
   justify-content: space-evenly;
+
+  button{
+    all: inherit;
+    cursor: pointer;
+}
 
   .select {
     margin-top: 1rem;
@@ -165,6 +170,11 @@
   min-width: 15rem;
   height: 12rem;
   cursor: pointer;
+  
+  button{
+    all: inherit;
+    cursor: pointer;
+  }
 
   .plusDiv {
     background: var(--gray-300);
@@ -263,7 +273,6 @@
   align-items: center;
   cursor: pointer;
 
-
   input {
     display: none;
   }
@@ -295,4 +304,75 @@
   width: 100%;
   height: 280px;
   background-color: var(--gray-300);
+}
+
+.btnEditProfile {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 0.5rem;
+
+  .btnEdit {
+    background: var(--other-red);
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    cursor: pointer;
+
+    &:hover{
+      transform: scale(1.07);
+    }
+  }
+
+}
+
+.btnEditDisabled {
+  display: none;
+
+  .imgEditProfile {
+    display: none;
+  }
+}
+
+.btnProfileChanges {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  gap: 1rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding: 5px 6%;
+
+  .btnConfirm {
+    background: #2F317C;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    border: 1px solid #2F317C;
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:hover {
+        background: #4549b2;
+    }
+  }
+
+  .btnCancel {
+    border: 1px solid var(--red);
+    color: var(--red);
+    border-radius: 5px;
+    font-weight: 500;
+    transition: 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--red);
+        color: white;
+    }
+}
 }

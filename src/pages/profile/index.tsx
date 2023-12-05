@@ -19,8 +19,26 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { api } from "@/services/apiClient";
 import { parseCookies } from "nookies";
 
+type PropsDataCompany = {
+  company?: {
+    id: string;
+    name: string;
+    company_name: string;
+    address: string;
+    description: string;
+    avatar_url: string;
+    banner_url: string;
+    email: string;
+    phone: string;
+    document: string;
+    social: string;
+    opening_time: dayjs.Dayjs;
+    closing_time: dayjs.Dayjs;
+  }
+}
 
-export default function Profile() {
+
+export default function Profile({ company }: PropsDataCompany) {
   const { getDataCompany } = useContext(AuthContext)
   const { '@firebase.token': token } = parseCookies()
   const [openModal, setOpenModal] = useState(false)
@@ -41,6 +59,7 @@ export default function Profile() {
   const [services, setServices] = useState([]);
 
   const { user } = useContext(AuthContext)
+  const [disabled, setDisabled] = useState(true)
 
   const itens = [
     user?.service.map((e, key) =>
@@ -87,21 +106,32 @@ export default function Profile() {
     setCategorySelected(e.target.value);
   }
 
+  function buttonEditProfile() {
+    setDisabled(false)
+  }
+
   const handleSaveCompanyData = async (e) => {
     e.preventDefault()
-
-    const response = await api.post('/user/company', {
-      company_name: companyName,
-      address: companyAddress,
-      avatar_url: avatarUrl,
-      banner_url: bannerUrl
-    }, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-
-    getDataCompany()
+    try {  
+      console.log(token);
+      
+      // const response = await api.post('/user/company', {
+      //   company_name: companyName,
+      //   address: companyAddress,
+      //   avatar_url: avatarUrl,
+      //   banner_url: bannerUrl,
+      //   closing_time: closedHour,
+      //   opening_time: openHour
+      // }, {
+      //   headers: {
+      //     "Authorization": `Bearer ${token}`
+      //   }
+      // }
+      // )
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
 
@@ -112,6 +142,9 @@ export default function Profile() {
         <title>Perfil | Ischedule</title>
       </Head>
       <div className={styles.containerCenter}>
+        <div className={styles.btnEditProfile}>
+          <button className={disabled ? styles.btnEdit : styles.btnEditDisabled} onClick={buttonEditProfile}><Image src={pencil} height={25} width={25} alt="pencil" className={styles.imgEditProfile} /></button>
+        </div>
         <div className={styles.headerProfile}>
           <div className={bannerUrl ? styles.editBanner : styles.labelBanner}>
             <label htmlFor="inpBanner">
@@ -121,8 +154,10 @@ export default function Profile() {
               type="file"
               id='inpBanner'
               accept="image/png, image/jpeg"
-              onChange={handleBannerFile}
+              onChange={(e) => handleBannerFile(e)}
+              disabled={disabled}
             />
+
 
             {bannerUrl && (
               <Image
@@ -143,7 +178,8 @@ export default function Profile() {
                 type="file"
                 id="inpAvatar"
                 accept="image/png, image/jpeg"
-                onChange={handleAvatarFile}
+                onChange={(e) => handleAvatarFile(e)}
+                disabled={disabled}
               />
 
               {avatarUrl && (
@@ -157,8 +193,8 @@ export default function Profile() {
               )}
             </div>
             <div className={styles.info}>
-              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
-              <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)}/>
+              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={disabled} />
+              <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} disabled={disabled} />
             </div>
           </div>
           <label className={styles.likes}>
@@ -171,7 +207,7 @@ export default function Profile() {
           onChange={handleChangeCategory}
           className={styles.select}
         >
-          <option value="" selected disabled>
+          <option value="" selected>
             Editar categoria
           </option>
           {categories.map((item, index) => {
@@ -214,6 +250,7 @@ export default function Profile() {
                     onChange={(newValue) => setOpenHour(newValue)}
                     ampm={false}
                     className={styles.bgClock}
+                    disabled={disabled}
                   />
                 </LocalizationProvider>
               </div>
@@ -230,6 +267,7 @@ export default function Profile() {
                     onChange={(newValue) => setClosedHour(newValue)}
                     ampm={false}
                     className={styles.bgClock}
+                    disabled={disabled}
                   />
                 </LocalizationProvider>
               </div>
@@ -239,6 +277,14 @@ export default function Profile() {
             </div>
           </div>
         </div>
+        {disabled ?
+          ''
+          :
+          <div className={styles.btnProfileChanges}>
+            <button className={styles.btnCancel} onClick={() => setDisabled(true)}>Cancelar</button>
+            <button className={styles.btnConfirm} onClick={(e) => handleSaveCompanyData(e)}>Salvar alterações</button>
+          </div>
+        }
       </div>
     </>
   );

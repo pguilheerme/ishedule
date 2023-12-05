@@ -50,7 +50,7 @@ function Header() {
               setFocus("profile");
             }}
           >
-            <p className={focus === "profile" && styles.focus}>Editar perfil</p>
+            <p className={focus === "profile" && styles.focus}>Perfil</p>
           </button>
         </nav>
       </div>
