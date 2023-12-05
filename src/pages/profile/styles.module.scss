@@ -1,6 +1,6 @@
 .containerCenter {
   width: 70vw;
-  margin: 3rem auto !important;
+  margin: 0.3rem auto !important;
   justify-content: space-evenly;
 
   button{
@@ -103,7 +103,7 @@
     z-index: 99;
     position: absolute;
     opacity: 0.7;
-    transition: all 0.7s;
+    transition: all 0.2s;
 
     &:hover {
       opacity: 1;
@@ -205,6 +205,7 @@
 
 .image {
   cursor: pointer;
+
 }
 
 .menuTime {
@@ -281,7 +282,7 @@
     z-index: 99;
     position: absolute;
     opacity: 0;
-    transition: all 0.7s;
+    transition: all 0.2s;
     margin-top: 5px;
     margin-right: 6.5px;
 
@@ -318,7 +319,7 @@
     font-size: 1rem;
     font-weight: 500;
     border-radius: 50%;
-    transition: all 0.4s ease;
+    transition: all 0.1s ease;
     cursor: pointer;
 
     &:hover{
@@ -377,10 +378,19 @@
 }
 }
 
-.btnDownArrow {
+.DownArrow {
   display: flex;
   align-items: center;
   justify-content: end;
-  background: var(--other-red);
-  border: 1px solid red;
+
+  .btnDownArrow {
+    padding: .85rem;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+}
+
+.disableLabel {
+  display: none;
 }

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import styles from "./styles.module.scss";
 import Image from "next/image";
@@ -20,56 +20,55 @@ import { api } from "@/services/apiClient";
 import { parseCookies } from "nookies";
 import { FaChevronDown } from "react-icons/fa";
 import { getDownloadURL } from "firebase/storage";
-import {firebase} from '../../services/firebase'
+import { firebase } from '../../services/firebase'
 import { toast } from "react-toastify";
-
 
 type PropsDataCompany = {
   company?: {
-    id: string;
-    name: string;
     company_name: string;
     address: string;
-    description: string;
-    avatar_url: string;
     banner_url: string;
-    email: string;
-    phone: string;
-    document: string;
-    social: string;
-    opening_time: dayjs.Dayjs;
-    closing_time: dayjs.Dayjs;
+    avatar_url: string;
+    opening_time: string;
+    closing_time: string;
   }
 }
 
-
-export default function Profile({ company }: PropsDataCompany) {
+export default function Profile() {
+  const { user } = useContext(AuthContext)
   const { getDataCompany } = useContext(AuthContext)
   const { '@firebase.token': token } = parseCookies()
   const [openModal, setOpenModal] = useState(false)
   const handleCloseModal = () => setOpenModal(false)
-  const [openHour, setOpenHour] = useState<dayjs.Dayjs>();
-  const [closedHour, setClosedHour] = useState<dayjs.Dayjs>();
+  const [openHour, setOpenHour] = useState<string>();
+  const [closedHour, setClosedHour] = useState<string>();
 
-  const [bannerUrl, setBannerUrl] = useState("");
+  const [bannerUrl, setBannerUrl] = useState('');
   const [imageBanner, setImageBanner] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [imageAvatar, setImageAvatar] = useState(null);
-  const [companyName, setCompanyName] = useState("");
-  const [companyAddress, setCompanyAddress] = useState("");
+  const [companyName, setCompanyName] = useState<string>();
+  const [companyAddress, setCompanyAddress] = useState<string>();
 
   const [categories, setCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState("");
 
   const [services, setServices] = useState([]);
-
-  const { user } = useContext(AuthContext)
   const [disabled, setDisabled] = useState(true)
+
+  useEffect(() => {
+    setCompanyName(user.company_name)
+    setCompanyAddress(user.address)
+    setAvatarUrl(user.avatar_url)
+    setBannerUrl(user.banner_url)
+    setClosedHour(user.closing_time)
+    setOpenHour(user.opening_time)
+
+  }, [user])
 
   const itens = [
     user?.service.map((e, key) =>
       <ServiceCard name={e.name} avatar={e.background_img_url} price={e.price} service={e} key={key} />
-
     )
   ]
 
@@ -78,13 +77,15 @@ export default function Profile({ company }: PropsDataCompany) {
       return;
     }
 
+
     const image = e.target.files[0];
+
 
     if (!image) {
       return;
     }
 
-    if (image.type === "image/jpeg" || image.type === "image/png") {
+    if (image.type === "image/jpeg" || image.type === "image/png" || image.type === "image/jpg") {
       setImageBanner(image);
       setBannerUrl(URL.createObjectURL(e.target.files[0]));
     }
@@ -101,7 +102,7 @@ export default function Profile({ company }: PropsDataCompany) {
       return;
     }
 
-    if (image.type === "image/jpeg" || image.type === "image/png") {
+    if (image.type === "image/jpeg" || image.type === "image/png" || image.type === "image/jpg") {
       setImageAvatar(image);
       setAvatarUrl(URL.createObjectURL(e.target.files[0]));
     }
@@ -120,7 +121,7 @@ export default function Profile({ company }: PropsDataCompany) {
 
     } catch (error) {
       console.log(error)
-      return false
+      throw new Error(error.message)
     }
   }
 
@@ -137,7 +138,7 @@ export default function Profile({ company }: PropsDataCompany) {
 
     } catch (error) {
       console.log(error)
-      return false
+      throw new Error(error.message)
     }
   }
 
@@ -152,9 +153,15 @@ export default function Profile({ company }: PropsDataCompany) {
   const handleSaveCompanyData = async (e) => {
     e.preventDefault()
     try {
-      
-      const avatar_url = await uploadCompanyAvatar(imageAvatar)
-      const banner_url = await uploadCompanyBanner(imageBanner)
+      let avatar_url = avatarUrl;
+      let banner_url = bannerUrl;
+      if (imageAvatar) {
+        avatar_url = await uploadCompanyAvatar(imageAvatar)
+      }
+
+      if (imageBanner) {
+        banner_url = await uploadCompanyBanner(imageBanner)
+      }
 
       const response = await api.patch('/user/company', {
         company_name: companyName,
@@ -174,7 +181,7 @@ export default function Profile({ company }: PropsDataCompany) {
     } catch (error) {
       console.log(error)
     }
-    finally{
+    finally {
       setDisabled(true)
     }
 
@@ -187,12 +194,14 @@ export default function Profile({ company }: PropsDataCompany) {
       <Head>
         <title>Perfil | Ischedule</title>
       </Head>
+    <div className={!disabled? styles.bodyActive : styles.body}>
+
       <div className={styles.containerCenter}>
         {/* {disabled ?
           ""
         :
-        <div className={}>
-          <button className={styles.btnDownArrow}><FaChevronDown color= {'#000'}/></button> 
+        <div className={styles.DownArrow}>
+          <button className={styles.btnDownArrow}><FaChevronDown color= {'#e83f5b'} size={30}/></button> 
         </div>
       } */}
         <div className={styles.btnEditProfile}>
@@ -200,14 +209,23 @@ export default function Profile({ company }: PropsDataCompany) {
         </div>
         <div className={styles.headerProfile}>
           <div className={bannerUrl ? styles.editBanner : styles.labelBanner}>
-            <label htmlFor="inpBanner">
-              <Image src={bannerUrl ? pencil : cameraAdd} alt="Camera add icon" width={60} className={styles.image} />
-            </label>
+            {bannerUrl ?
+              
+                disabled? '':
+                  <label htmlFor="inpBanner">
+                    <Image src={ pencil } alt="Camera add icon" width={60} className={styles.image} />
+                  </label>
+               :
+              <label htmlFor="inpBanner">
+                <Image src={ cameraAdd } alt="Camera add icon" width={60} className={styles.image} />
+              </label>
+            }
+
             <input
               type="file"
               id='inpBanner'
               accept="image/png, image/jpeg"
-              onChange={(e) => handleBannerFile(e)}
+              onChange={handleBannerFile}
               disabled={disabled}
             />
 
@@ -224,14 +242,24 @@ export default function Profile({ company }: PropsDataCompany) {
           </div>
           <div className={styles.avatar}>
             <div className={avatarUrl ? styles.editAvatar : styles.labelAvatar}>
-              <label htmlFor="inpAvatar">
-                <Image src={avatarUrl ? pencil : cameraAdd} alt="Camera add icon" width={40} className={styles.image} />
-              </label>
+              {avatarUrl ?
+
+                disabled ? '' :
+                  <label htmlFor="inpAvatar">
+                    <Image src={pencil} alt="Camera add icon" width={40} className={styles.image} />
+                  </label>
+
+                :
+                <label htmlFor="inpAvatar">
+                  <Image src={cameraAdd} alt="Camera add icon" width={40} className={styles.image} />
+                </label>
+              }
+
               <input
                 type="file"
                 id="inpAvatar"
                 accept="image/png, image/jpeg"
-                onChange={(e) => handleAvatarFile(e)}
+                onChange={handleAvatarFile}
                 disabled={disabled}
               />
 
@@ -247,7 +275,7 @@ export default function Profile({ company }: PropsDataCompany) {
             </div>
             <div className={styles.info}>
               <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={disabled} />
-              <input maxLength={30} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} disabled={disabled} />
+              <input maxLength={50} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} disabled={disabled} />
             </div>
           </div>
           <label className={styles.likes}>
@@ -300,7 +328,7 @@ export default function Profile({ company }: PropsDataCompany) {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <TimePicker
                     value={openHour}
-                    onChange={(newValue) => setOpenHour(newValue)}
+                    onChange={(e) => setOpenHour(e)}
                     ampm={false}
                     className={styles.bgClock}
                     disabled={disabled}
@@ -317,7 +345,7 @@ export default function Profile({ company }: PropsDataCompany) {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <TimePicker
                     value={closedHour}
-                    onChange={(newValue) => setClosedHour(newValue)}
+                    onChange={(e) => setClosedHour(e)}
                     ampm={false}
                     className={styles.bgClock}
                     disabled={disabled}
@@ -339,6 +367,8 @@ export default function Profile({ company }: PropsDataCompany) {
           </div>
         }
       </div>
+    </div>
+
     </>
   );
 }
