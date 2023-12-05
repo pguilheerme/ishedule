@@ -19,8 +19,26 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { api } from "@/services/apiClient";
 import { parseCookies } from "nookies";
 
+type PropsDataCompany = {
+  company?: {
+    id: string;
+    name: string;
+    company_name: string;
+    address: string;
+    description: string;
+    avatar_url: string;
+    banner_url: string;
+    email: string;
+    phone: string;
+    document: string;
+    social: string;
+    opening_time: dayjs.Dayjs;
+    closing_time: dayjs.Dayjs;
+  }
+}
 
-export default function Profile() {
+
+export default function Profile({ company }: PropsDataCompany) {
   const { getDataCompany } = useContext(AuthContext)
   const { '@firebase.token': token } = parseCookies()
   const [openModal, setOpenModal] = useState(false)
@@ -95,20 +113,21 @@ export default function Profile() {
   const handleSaveCompanyData = async (e) => {
     e.preventDefault()
     try {  
-      const response = await api.post('/user/company', {
-        company_name: companyName,
-        address: companyAddress,
-        avatar_url: avatarUrl,
-        banner_url: bannerUrl
-      }, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        }
-      )
-  
-      getDataCompany()
-
+      console.log(token);
+      
+      // const response = await api.post('/user/company', {
+      //   company_name: companyName,
+      //   address: companyAddress,
+      //   avatar_url: avatarUrl,
+      //   banner_url: bannerUrl,
+      //   closing_time: closedHour,
+      //   opening_time: openHour
+      // }, {
+      //   headers: {
+      //     "Authorization": `Bearer ${token}`
+      //   }
+      // }
+      // )
     } catch (error) {
       console.log(error)
     }
@@ -135,7 +154,7 @@ export default function Profile() {
               type="file"
               id='inpBanner'
               accept="image/png, image/jpeg"
-              onChange={handleBannerFile}
+              onChange={(e) => handleBannerFile(e)}
               disabled={disabled}
             />
 
@@ -159,7 +178,7 @@ export default function Profile() {
                 type="file"
                 id="inpAvatar"
                 accept="image/png, image/jpeg"
-                onChange={handleAvatarFile}
+                onChange={(e) => handleAvatarFile(e)}
                 disabled={disabled}
               />
 
@@ -263,7 +282,7 @@ export default function Profile() {
           :
           <div className={styles.btnProfileChanges}>
             <button className={styles.btnCancel} onClick={() => setDisabled(true)}>Cancelar</button>
-            <button className={styles.btnConfirm} onClick={handleSaveCompanyData}>Salvar alterações</button>
+            <button className={styles.btnConfirm} onClick={(e) => handleSaveCompanyData(e)}>Salvar alterações</button>
           </div>
         }
       </div>

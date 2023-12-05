@@ -87,14 +87,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 const {data} = response
 
                 setUser(data)
-
                 console.log(data)
-
 
             })
                 .catch((error) => {
                     console.log(error);
-
+ 
                     signOut();
                 })
         }
