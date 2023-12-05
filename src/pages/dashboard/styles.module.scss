@@ -30,13 +30,14 @@
 .containerDown {
   margin-top: 2rem;
   height: 15rem;
+  gap: 3%;
 }
 
 .box {
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 15rem;
+  width: calc(25% - 1.5rem);
   gap: 1rem;
   border-radius: 1.25rem;
   background: #fff;
@@ -73,6 +74,19 @@
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
+.boxList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: auto;
+  flex: 1;
+  width: 80%;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
 .containerList {
   display: flex;
   align-items: center;
@@ -82,21 +96,18 @@
   border-radius: 1.25rem;
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  overflow: auto;
   max-height: max-content;
   scrollbar-width: 0;
+  position: relative;
   padding-bottom: 1.5rem;
-
-  &::-webkit-scrollbar {
-    width: 0;
-  }
 }
 
 .listTitle {
+  border-radius: 1.25rem;
   background: #fff;
   align-items: center;
   justify-content: center;
-  min-height: 2.5rem;
+  min-height: 1rem;
   width: 100%;
   position: sticky;
   top: 0;
@@ -111,17 +122,14 @@
 }
 
 .btnList {
-  min-height: 3rem;
-  min-width: 3rem;
-  border-radius: 50%;
   border: none;
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 15rem;
-  bottom: 4.5rem;
+  right: 5%;
+  bottom: 5%;
   -webkit-animation: mover 1s infinite  alternate;
   animation: mover 1s infinite  alternate;
 }
