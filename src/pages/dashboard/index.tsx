@@ -170,7 +170,7 @@ export default function Dashboard() {
             </div>
             <div className={styles.boxText}>
               <h2>41</h2>
-              <h3>Clientes atendidos</h3>
+              <h3>Atendimentos</h3>
             </div>
           </div>
         </div>
