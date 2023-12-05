@@ -19,7 +19,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 
 export default function Dashboard() {
@@ -175,7 +175,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className={styles.containerDown}>
-        <ResponsiveContainer className={styles.containerChart} width={700}>
+          <ResponsiveContainer className={styles.containerChart} width={700}>
             <AreaChart
               width={700}
               height={230}
@@ -216,22 +216,27 @@ export default function Dashboard() {
             <div className={styles.listTitle}>
               <h3>Atendentes de hoje</h3>
             </div>
-            {user?.professionals.length != 0 ? (
-              user?.professionals.map((e, key) => {
-                return <><p>{e.name}</p></>;
-              })
+            <div className={styles.boxList}>
+              {user?.professionals.length != 0 ? (
+                user?.professionals.map((e, key) => {
+                  return (
+                    <>
+                      <p>- {e.name}</p>
+                    </>
+                  );
+                })
+              ) : (
+                <p>Ainda não há funcionários registrados</p>
+              )}
+            </div>
+            {user?.professionals.length >= 8 ? (
+              <button className={styles.btnList}>
+                <BiArrowToBottom size={30} color="#2F317C" />
+              </button>
             ) : (
-              <p>Ainda não há funcionários registrados</p>
+              ""
             )}
           </div>
-          {user?.professionals.length >= 6 ? 
-          (<button className={styles.btnList}>
-            <BiArrowToBottom size={30} color="#2F317C" />
-          </button>)
-          :
-          ""
-        }
-          
         </div>
       </div>
     </>
