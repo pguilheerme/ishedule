@@ -4,6 +4,7 @@ import Router from "next/router";
 import { api } from "@/services/apiClient";
 import { toast } from "react-toastify";
 import { firebase, auth } from "@/services/firebase";
+import dayjs from "dayjs";
 
 
 type AuthContextData = {
@@ -37,7 +38,14 @@ type UserProps = {
     name?: string,
     email: string,
     professionals?: Professionals[],
-    service?: ServiceProps[] 
+    service?: ServiceProps[],
+    company_name?: string,
+    address?: string,
+    avatar_url?: string,
+    banner_url?: string,
+    opening_time?: string,
+    closing_time?: string,
+    description?: string
 }
 
 type SignUpProps = {
@@ -70,7 +78,19 @@ export function signOut() {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const { '@firebase.token': token } = parseCookies();
-    const [user, setUser] = useState<UserProps>()
+    const [user, setUser] = useState<UserProps>({
+        id: "",
+        email: "",
+        company_name: "",
+        address: "",
+        avatar_url: "",
+        banner_url: "",
+        closing_time: "",
+        opening_time: "",
+        description: "",
+        professionals: [],
+        service: []
+    })
     const isAuthenticated = !!user
 
     useEffect(() => {
@@ -87,7 +107,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 const {data} = response
 
                 setUser(data)
-                console.log(data)
 
             })
                 .catch((error) => {
