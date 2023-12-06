@@ -22,6 +22,8 @@ import { FaChevronDown } from "react-icons/fa";
 import { getDownloadURL } from "firebase/storage";
 import { firebase } from '../../services/firebase'
 import { toast } from "react-toastify";
+import Checkbox from '@mui/material/Checkbox';
+
 
 type PropsDataCompany = {
   company?: {
@@ -49,12 +51,15 @@ export default function Profile() {
   const [imageAvatar, setImageAvatar] = useState(null);
   const [companyName, setCompanyName] = useState<string>();
   const [companyAddress, setCompanyAddress] = useState<string>();
+  const [selectedDay, setselectedDay] = useState<string>('dom');
 
   const [categories, setCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState("");
 
   const [services, setServices] = useState([]);
+  const [servicesDays, setServicesDays] = useState([{ name: "dom", checked: false }, { name: "seg", checked: false }, { name: "ter", checked: false }, { name: "qua", checked: false }, { name: "qui", checked: false }, { name: "sex", checked: false }, { name: "sab", checked: false }]);
   const [disabled, setDisabled] = useState(true)
+  const [checked, setChecked] = useState(false)
 
   useEffect(() => {
     setCompanyName(user.company_name)
@@ -187,6 +192,43 @@ export default function Profile() {
 
   }
 
+  const setDate = ({}) =>
+    <div>
+      <div className={styles.time}>
+        <div className={styles.timeRight}>
+          <CiUnlock color="#fff" size={50} />
+        </div>
+        <div className={styles.timeLeft}>
+          <h3>Abertura</h3>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              value={openHour}
+              onChange={(e) => setOpenHour(e)}
+              ampm={false}
+              className={styles.bgClock}
+              disabled={disabled}
+            />
+          </LocalizationProvider>
+        </div>
+      </div>
+      <div className={styles.time}>
+        <div className={styles.timeRight}>
+          <CiLock color="#fff" size={50} />
+        </div>
+        <div className={styles.timeLeft}>
+          <h3>Fechamento</h3>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              value={closedHour}
+              onChange={(e) => setClosedHour(e)}
+              ampm={false}
+              className={styles.bgClock}
+              disabled={disabled}
+            />
+          </LocalizationProvider>
+        </div>
+      </div>
+    </div>
 
 
   return (
@@ -194,180 +236,204 @@ export default function Profile() {
       <Head>
         <title>Perfil | Ischedule</title>
       </Head>
-    <div className={!disabled? styles.bodyActive : styles.body}>
+      <div className={!disabled ? styles.bodyActive : styles.body}>
 
-      <div className={styles.containerCenter}>
-        {/* {disabled ?
+        <div className={styles.containerCenter}>
+          {/* {disabled ?
           ""
         :
         <div className={styles.DownArrow}>
           <button className={styles.btnDownArrow}><FaChevronDown color= {'#e83f5b'} size={30}/></button> 
         </div>
       } */}
-        <div className={styles.btnEditProfile}>
-          <button className={disabled ? styles.btnEdit : styles.btnEditDisabled} onClick={buttonEditProfile}><Image src={pencil} height={25} width={25} alt="pencil" className={styles.imgEditProfile} /></button>
-        </div>
-        <div className={styles.headerProfile}>
-          <div className={bannerUrl ? styles.editBanner : styles.labelBanner}>
-            {bannerUrl ?
-              
-                disabled? '':
-                  <label htmlFor="inpBanner">
-                    <Image src={ pencil } alt="Camera add icon" width={60} className={styles.image} />
-                  </label>
-               :
-              <label htmlFor="inpBanner">
-                <Image src={ cameraAdd } alt="Camera add icon" width={60} className={styles.image} />
-              </label>
-            }
-
-            <input
-              type="file"
-              id='inpBanner'
-              accept="image/png, image/jpeg"
-              onChange={handleBannerFile}
-              disabled={disabled}
-            />
-
-
-            {bannerUrl && (
-              <Image
-                src={bannerUrl}
-                alt="Banner da loja"
-                width={250}
-                height={250}
-                className={styles.bannerPreview}
-              />
-            )}
+          <div className={styles.btnEditProfile}>
+            <button className={disabled ? styles.btnEdit : styles.btnEditDisabled} onClick={buttonEditProfile}><Image src={pencil} height={25} width={25} alt="pencil" className={styles.imgEditProfile} /></button>
           </div>
-          <div className={styles.avatar}>
-            <div className={avatarUrl ? styles.editAvatar : styles.labelAvatar}>
-              {avatarUrl ?
+          <div className={styles.headerProfile}>
+            <div className={bannerUrl ? styles.editBanner : styles.labelBanner}>
+              {bannerUrl ?
 
                 disabled ? '' :
-                  <label htmlFor="inpAvatar">
-                    <Image src={pencil} alt="Camera add icon" width={40} className={styles.image} />
+                  <label htmlFor="inpBanner">
+                    <Image src={pencil} alt="Camera add icon" width={60} className={styles.image} />
                   </label>
-
                 :
-                <label htmlFor="inpAvatar">
-                  <Image src={cameraAdd} alt="Camera add icon" width={40} className={styles.image} />
+                <label htmlFor="inpBanner">
+                  <Image src={cameraAdd} alt="Camera add icon" width={60} className={styles.image} />
                 </label>
               }
 
               <input
                 type="file"
-                id="inpAvatar"
+                id='inpBanner'
                 accept="image/png, image/jpeg"
-                onChange={handleAvatarFile}
+                onChange={handleBannerFile}
                 disabled={disabled}
               />
 
-              {avatarUrl && (
+
+              {bannerUrl && (
                 <Image
-                  src={avatarUrl}
-                  alt="Foto de perfil"
-                  width={50}
-                  height={50}
-                  className={styles.avatarPreview}
+                  src={bannerUrl}
+                  alt="Banner da loja"
+                  width={250}
+                  height={250}
+                  className={styles.bannerPreview}
                 />
               )}
             </div>
-            <div className={styles.info}>
-              <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={disabled} />
-              <input maxLength={50} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} disabled={disabled} />
-            </div>
-          </div>
-          <label className={styles.likes}>
-            <AiFillHeart color="#fff" size={25} />
-            <span>300</span>
-          </label>
-        </div>
-        <select
-          value={categorySelected}
-          onChange={handleChangeCategory}
-          className={styles.select}
-        >
-          <option value="" selected>
-            Editar categoria
-          </option>
-          {categories.map((item, index) => {
-            return (
-              <option key={item.id} value={index}>
-                {item.name}
-              </option>
-            );
-          })}
-        </select>
-        <div className={styles.menuServices}>
-          <div className={styles.addService}>
-            <div className={styles.plusDiv}>
-              <button onClick={() => setOpenModal(true)}>
-                <BsPlusLg color="#e83f5b" size={80} />
-              </button>
-              <ModalService open={openModal} onClose={handleCloseModal} />
-            </div>
-            <span>Adicionar novo serviço</span>
-          </div>
+            <div className={styles.avatar}>
+              <div className={avatarUrl ? styles.editAvatar : styles.labelAvatar}>
+                {avatarUrl ?
 
-          {user?.service ?
-            itens
+                  disabled ? '' :
+                    <label htmlFor="inpAvatar">
+                      <Image src={pencil} alt="Camera add icon" width={40} className={styles.image} />
+                    </label>
+
+                  :
+                  <label htmlFor="inpAvatar">
+                    <Image src={cameraAdd} alt="Camera add icon" width={40} className={styles.image} />
+                  </label>
+                }
+
+                <input
+                  type="file"
+                  id="inpAvatar"
+                  accept="image/png, image/jpeg"
+                  onChange={handleAvatarFile}
+                  disabled={disabled}
+                />
+
+                {avatarUrl && (
+                  <Image
+                    src={avatarUrl}
+                    alt="Foto de perfil"
+                    width={50}
+                    height={50}
+                    className={styles.avatarPreview}
+                  />
+                )}
+              </div>
+              <div className={styles.info}>
+                <input maxLength={35} size={60} type="text" className={styles.inputName} placeholder="Nome da empresa" value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={disabled} />
+                <input maxLength={50} type="text" className={styles.inputAdress} placeholder="Rua XXXX - Nº 0" value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} disabled={disabled} />
+              </div>
+            </div>
+            <label className={styles.likes}>
+              <AiFillHeart color="#fff" size={25} />
+              <span>300</span>
+            </label>
+          </div>
+          <select
+            value={categorySelected}
+            onChange={handleChangeCategory}
+            className={styles.select}
+          >
+            <option value="" selected>
+              Editar categoria
+            </option>
+            {categories.map((item, index) => {
+              return (
+                <option key={item.id} value={index}>
+                  {item.name}
+                </option>
+              );
+            })}
+          </select>
+          <div className={styles.menuServices}>
+            <div className={styles.addService}>
+              <div className={styles.plusDiv}>
+                <button onClick={() => setOpenModal(true)}>
+                  <BsPlusLg color="#e83f5b" size={80} />
+                </button>
+                <ModalService open={openModal} onClose={handleCloseModal} />
+              </div>
+              <span>Adicionar novo serviço</span>
+            </div>
+
+            {user?.service ?
+              itens
+              :
+              <div className={styles.noServices}>
+                <p>não há serviços</p>
+              </div>
+            }
+
+          </div>
+          <div className={styles.menuTime}>
+            <h2>Horário de Abertura e Fechamento</h2>
+            <div className={styles.timesDiv}>
+              <div className={styles.weekDaysCheck}>
+                {servicesDays.map((day) => {
+                  const dayName = day.name
+                  return <button className={day.checked ? styles.containerCheckbox : styles.containerCheckboxDisable}
+                    onClick={(e) => {
+                      const changeDay = servicesDays.map((day) => {
+                        e.preventDefault()
+                        if (day.name === dayName) {
+                          return { ...day, checked: !day.checked }
+                        }
+                        return { ...day, checked: false }
+                      })
+                      setServicesDays(changeDay)
+                      setselectedDay(day.name)
+                    }}>
+                    <label htmlFor="dom">{day.name}</label>
+                  </button>
+                })
+                }
+              </div>
+
+              {setDate(selectedDay)}
+            </div>
+            {/* <div className={styles.divHours}>
+                <div className={styles.time}>
+                  <div className={styles.timeRight}>
+                    <CiUnlock color="#fff" size={50} />
+                  </div>
+                  <div className={styles.timeLeft}>
+                    <h3>Abertura</h3>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <TimePicker
+                        value={openHour}
+                        onChange={(e) => setOpenHour(e)}
+                        ampm={false}
+                        className={styles.bgClock}
+                        disabled={disabled}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                </div>
+                <div className={styles.time}>
+                  <div className={styles.timeRight}>
+                    <CiLock color="#fff" size={50} />
+                  </div>
+                  <div className={styles.timeLeft}>
+                    <h3>Fechamento</h3>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <TimePicker
+                        value={closedHour}
+                        onChange={(e) => setClosedHour(e)}
+                        ampm={false}
+                        className={styles.bgClock}
+                        disabled={disabled}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                </div>
+              </div> */}
+          </div>
+          {disabled ?
+            ''
             :
-            <div className={styles.noServices}>
-              <p>não há serviços</p>
+            <div className={styles.btnProfileChanges}>
+              <button className={styles.btnCancel} onClick={() => setDisabled(true)}>Cancelar</button>
+              <button className={styles.btnConfirm} onClick={(e) => handleSaveCompanyData(e)}>Salvar alterações</button>
             </div>
           }
-
         </div>
-        <div className={styles.menuTime}>
-          <h2>Horário de Abertura e Fechamento</h2>
-          <div className={styles.timesDiv}>
-            <div className={styles.time}>
-              <div className={styles.timeLeft}>
-                <h3>Abertura</h3>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    value={openHour}
-                    onChange={(e) => setOpenHour(e)}
-                    ampm={false}
-                    className={styles.bgClock}
-                    disabled={disabled}
-                  />
-                </LocalizationProvider>
-              </div>
-              <div className={styles.timeRight}>
-                <CiUnlock color="#fff" size={50} />
-              </div>
-            </div>
-            <div className={styles.time}>
-              <div className={styles.timeLeft}>
-                <h3>Fechamento</h3>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    value={closedHour}
-                    onChange={(e) => setClosedHour(e)}
-                    ampm={false}
-                    className={styles.bgClock}
-                    disabled={disabled}
-                  />
-                </LocalizationProvider>
-              </div>
-              <div className={styles.timeRight}>
-                <CiLock color="#fff" size={50} />
-              </div>
-            </div>
-          </div>
-        </div>
-        {disabled ?
-          ''
-          :
-          <div className={styles.btnProfileChanges}>
-            <button className={styles.btnCancel} onClick={() => setDisabled(true)}>Cancelar</button>
-            <button className={styles.btnConfirm} onClick={(e) => handleSaveCompanyData(e)}>Salvar alterações</button>
-          </div>
-        }
       </div>
-    </div>
 
     </>
   );

@@ -1,12 +1,12 @@
 .containerCenter {
   width: 70vw;
-  margin: 0.3rem auto !important;
+  margin: 0.3rem auto 2rem !important;
   justify-content: space-evenly;
 
-  button{
+  button {
     all: inherit;
     cursor: pointer;
-}
+  }
 
   .select {
     margin-top: 1rem;
@@ -170,8 +170,8 @@
   min-width: 15rem;
   height: 12rem;
   cursor: pointer;
-  
-  button{
+
+  button {
     all: inherit;
     cursor: pointer;
   }
@@ -226,16 +226,17 @@
     align-items: center;
     justify-content: center;
     height: 20rem;
-    width: 30rem;
+    width: 40rem;
     border-radius: 1rem;
     flex-direction: column;
-    gap: 4rem;
+    gap: 1rem;
 
     .time {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 5rem;
+      flex-direction: row;
+      padding: 1rem;
 
       .timeRight {
         margin-top: 2rem;
@@ -244,6 +245,7 @@
       h3 {
         margin-bottom: 0.5rem;
         color: var(--white);
+        text-align: center;
       }
 
       .bgClock {
@@ -322,7 +324,7 @@
     transition: all 0.1s ease;
     cursor: pointer;
 
-    &:hover{
+    &:hover {
       transform: scale(1.07);
     }
   }
@@ -359,7 +361,7 @@
     cursor: pointer;
 
     &:hover {
-        background: #4549b2;
+      background: #4549b2;
     }
   }
 
@@ -372,10 +374,10 @@
     cursor: pointer;
 
     &:hover {
-        background: var(--red);
-        color: white;
+      background: var(--red);
+      color: white;
     }
-}
+  }
 }
 
 .DownArrow {
@@ -393,4 +395,62 @@
 
 .disableLabel {
   display: none;
+}
+
+.weekDaysText {
+  color: #fff;
+  margin-top: 1rem;
+}
+
+.weekDaysCheck {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 35%;
+
+  .containerCheckbox {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    border-bottom: 1px solid var(--other-red);
+  }
+
+  .containerCheckboxDisable {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    
+    label {
+      color: var(--gray-400);
+    }
+
+    :hover {
+      color: #fff;
+      border-bottom: 1px solid var(--other-red);
+    }
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+}
+
+.divHours {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
 }
