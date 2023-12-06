@@ -101,9 +101,13 @@ export default function Dashboard() {
   const { user } = useContext(AuthContext);
   const [date, setDate] = useState<dayjs.Dayjs>();
   const [formatDate, setFormatDate] = useState("");
+  const [countFunc, setCountFunc] = useState(0);
 
   useEffect(() => {
     let today = dayjs();
+    let funcToday = user.professionals.length
+    
+    setCountFunc(funcToday)
     handleFormatDate(today);
   }, []);
 
@@ -160,7 +164,7 @@ export default function Dashboard() {
               <BiBody size={40} />
             </div>
             <div className={styles.boxText}>
-              <h2>12</h2>
+              <h2>{countFunc}</h2>
               <h3>Funcionários</h3>
             </div>
           </div>
