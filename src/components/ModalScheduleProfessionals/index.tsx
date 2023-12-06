@@ -7,6 +7,8 @@ import { api } from '@/services/apiClient';
 import { parseCookies } from 'nookies';
 import { AuthContext } from '@/contexts/AuthContext';
 import { toast } from 'react-toastify'
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
 
 type PropsModalScheduleProfessionals = {
     open: boolean,
@@ -20,10 +22,14 @@ type PropsModalScheduleProfessionals = {
 }
 
 export function ModalScheduleProfessionals ({open, onClose, edit= false, scheduleProfessionals}: PropsModalScheduleProfessionals) {
-    const [weekdays , setWeekdays] = useState([])
+    const [companyWeekdays , setCompanyWeekdays] = useState([])
+    const [companyOpeningTime, setCompanyOpeningTime] = useState("")
+    const [companyClosingTime, setCompanyClosingTime] = useState("")
+
     const [selectedWeekdays, setSelectedWeekdays] = useState([])
     const [enterTime, setEnterTime] = useState("")
     const [exitTime, setExitTime] = useState("")
+
     const [disabled, setDisabled] = useState(false);
 
     return (
