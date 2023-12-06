@@ -362,6 +362,7 @@
 
     &:hover {
       background: #4549b2;
+      border: 1px solid #4549b2;
     }
   }
 
@@ -408,7 +409,7 @@
   justify-content: space-evenly;
   flex-direction: row;
   width: 100%;
-  margin-bottom: 35%;
+  margin-bottom: 10%;
 
   .containerCheckbox {
     all: unset;
@@ -453,4 +454,11 @@
   justify-content: center;
   flex-direction: row;
   gap: 1rem;
+}
+
+.useHour {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
 }

@@ -36,6 +36,14 @@ type PropsDataCompany = {
   }
 }
 
+type PropsDayData = {
+  name: string;
+  selected: boolean;
+  closing_time: string;
+  opening_time: string;
+}
+
+
 export default function Profile() {
   const { user } = useContext(AuthContext)
   const { getDataCompany } = useContext(AuthContext)
@@ -51,15 +59,16 @@ export default function Profile() {
   const [imageAvatar, setImageAvatar] = useState(null);
   const [companyName, setCompanyName] = useState<string>();
   const [companyAddress, setCompanyAddress] = useState<string>();
-  const [selectedDay, setselectedDay] = useState<string>('dom');
 
   const [categories, setCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState("");
 
   const [services, setServices] = useState([]);
-  const [servicesDays, setServicesDays] = useState([{ name: "dom", checked: false }, { name: "seg", checked: false }, { name: "ter", checked: false }, { name: "qua", checked: false }, { name: "qui", checked: false }, { name: "sex", checked: false }, { name: "sab", checked: false }]);
+  const [servicesDays, setServicesDays] = useState([{ name: "dom", selected: false }, { name: "seg", selected: false }, { name: "ter", selected: false }, { name: "qua", selected: false }, { name: "qui", selected: false }, { name: "sex", selected: false }, { name: "sab", selected: false }]);
   const [disabled, setDisabled] = useState(true)
-  const [checked, setChecked] = useState(false)
+  const [selected, setSelected] = useState(false)
+  const [selectedDay, setselectedDay] = useState<string>('dom');
+  const [weekDays, setWeekDays] = useState([{ name: "dom", checked: false, opening_time: '', closing_time: '' }, { name: "seg", checked: false, opening_time: '', closing_time: '' }, { name: "ter", checked: false, opening_time: '', closing_time: '' }, { name: "qua", checked: false, opening_time: '', closing_time: '' }, { name: "qui", checked: false, opening_time: '', closing_time: '' }, { name: "sex", checked: false, opening_time: '', closing_time: '' }, { name: "sab", checked: false, opening_time: '', closing_time: '' }])
 
   useEffect(() => {
     setCompanyName(user.company_name)
@@ -192,43 +201,60 @@ export default function Profile() {
 
   }
 
-  const setDate = ({}) =>
-    <div>
-      <div className={styles.time}>
-        <div className={styles.timeRight}>
-          <CiUnlock color="#fff" size={50} />
+  const setDate = (name: string) => {
+    const day = weekDays.find((param) => param.name === name)
+
+    return (
+      <div className={styles.useHour}>
+        <div className={styles.time}>
+          <div className={styles.timeRight}>
+            <CiUnlock color="#fff" size={50} />
+          </div>
+          <div className={styles.timeLeft}>
+            <h3>Abertura</h3>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <TimePicker
+                value={openHour}
+                onChange={(e) => {
+                  const newOpenHour = weekDays.map((param) => {
+                    if (param.name === name) {
+                      return {
+                        ...param,
+                        opening_time: e
+                      }
+                    }
+                    return param
+                  })
+                  setWeekDays(newOpenHour)
+                }
+
+                }
+                ampm={false}
+                className={styles.bgClock}
+                disabled={disabled}
+              />
+            </LocalizationProvider>
+          </div>
         </div>
-        <div className={styles.timeLeft}>
-          <h3>Abertura</h3>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={openHour}
-              onChange={(e) => setOpenHour(e)}
-              ampm={false}
-              className={styles.bgClock}
-              disabled={disabled}
-            />
-          </LocalizationProvider>
+        <div className={styles.time}>
+          <div className={styles.timeRight}>
+            <CiLock color="#fff" size={50} />
+          </div>
+          <div className={styles.timeLeft}>
+            <h3>Fechamento</h3>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <TimePicker
+                value={closedHour}
+                onChange={(e) => setClosedHour(e)}
+                ampm={false}
+                className={styles.bgClock}
+                disabled={disabled}
+              />
+            </LocalizationProvider>
+          </div>
         </div>
-      </div>
-      <div className={styles.time}>
-        <div className={styles.timeRight}>
-          <CiLock color="#fff" size={50} />
-        </div>
-        <div className={styles.timeLeft}>
-          <h3>Fechamento</h3>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={closedHour}
-              onChange={(e) => setClosedHour(e)}
-              ampm={false}
-              className={styles.bgClock}
-              disabled={disabled}
-            />
-          </LocalizationProvider>
-        </div>
-      </div>
-    </div>
+      </div>)
+  }
 
 
   return (
@@ -367,20 +393,24 @@ export default function Profile() {
               <div className={styles.weekDaysCheck}>
                 {servicesDays.map((day) => {
                   const dayName = day.name
-                  return <button className={day.checked ? styles.containerCheckbox : styles.containerCheckboxDisable}
+                  return <button className={day.selected ? styles.containerCheckbox : styles.containerCheckboxDisable}
                     onClick={(e) => {
                       const changeDay = servicesDays.map((day) => {
                         e.preventDefault()
                         if (day.name === dayName) {
-                          return { ...day, checked: !day.checked }
+                          return { ...day, selected: true }
                         }
-                        return { ...day, checked: false }
+                        return { ...day, selected: false }
                       })
                       setServicesDays(changeDay)
+
                       setselectedDay(day.name)
+                      console.log(day.name, day.selected);
+
                     }}>
-                    <label htmlFor="dom">{day.name}</label>
+                    <label htmlFor="dom">{day.name} </label>
                   </button>
+
                 })
                 }
               </div>
