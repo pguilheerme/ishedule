@@ -3,10 +3,10 @@
   margin: 0.3rem auto 2rem !important;
   justify-content: space-evenly;
 
-  button{
+  button {
     all: inherit;
     cursor: pointer;
-}
+  }
 
   .select {
     margin-top: 1rem;
@@ -170,8 +170,8 @@
   min-width: 15rem;
   height: 12rem;
   cursor: pointer;
-  
-  button{
+
+  button {
     all: inherit;
     cursor: pointer;
   }
@@ -324,7 +324,7 @@
     transition: all 0.1s ease;
     cursor: pointer;
 
-    &:hover{
+    &:hover {
       transform: scale(1.07);
     }
   }
@@ -361,7 +361,7 @@
     cursor: pointer;
 
     &:hover {
-        background: #4549b2;
+      background: #4549b2;
     }
   }
 
@@ -374,10 +374,10 @@
     cursor: pointer;
 
     &:hover {
-        background: var(--red);
-        color: white;
+      background: var(--red);
+      color: white;
     }
-}
+  }
 }
 
 .DownArrow {
@@ -405,16 +405,35 @@
 .weekDaysCheck {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   flex-direction: row;
-  gap: 1.5rem;
-
+  width: 100%;
+  margin-bottom: 35%;
 
   .containerCheckbox {
+    all: unset;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: row;
+    border-bottom: 1px solid var(--other-red);
+  }
+
+  .containerCheckboxDisable {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    
+    label {
+      color: var(--gray-400);
+    }
+
+    :hover {
+      color: #fff;
+      border-bottom: 1px solid var(--other-red);
+    }
   }
 
   label {

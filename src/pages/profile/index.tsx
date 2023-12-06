@@ -23,7 +23,6 @@ import { getDownloadURL } from "firebase/storage";
 import { firebase } from '../../services/firebase'
 import { toast } from "react-toastify";
 import Checkbox from '@mui/material/Checkbox';
-import { ModalScheduleCompany } from "@/components/ModalScheduleCompany";
 
 
 type PropsDataCompany = {
@@ -52,11 +51,13 @@ export default function Profile() {
   const [imageAvatar, setImageAvatar] = useState(null);
   const [companyName, setCompanyName] = useState<string>();
   const [companyAddress, setCompanyAddress] = useState<string>();
+  const [selectedDay, setselectedDay] = useState<string>('dom');
 
   const [categories, setCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState("");
 
   const [services, setServices] = useState([]);
+  const [servicesDays, setServicesDays] = useState([{ name: "dom", checked: false }, { name: "seg", checked: false }, { name: "ter", checked: false }, { name: "qua", checked: false }, { name: "qui", checked: false }, { name: "sex", checked: false }, { name: "sab", checked: false }]);
   const [disabled, setDisabled] = useState(true)
   const [checked, setChecked] = useState(false)
 
@@ -191,6 +192,43 @@ export default function Profile() {
 
   }
 
+  const setDate = ({}) =>
+    <div>
+      <div className={styles.time}>
+        <div className={styles.timeRight}>
+          <CiUnlock color="#fff" size={50} />
+        </div>
+        <div className={styles.timeLeft}>
+          <h3>Abertura</h3>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              value={openHour}
+              onChange={(e) => setOpenHour(e)}
+              ampm={false}
+              className={styles.bgClock}
+              disabled={disabled}
+            />
+          </LocalizationProvider>
+        </div>
+      </div>
+      <div className={styles.time}>
+        <div className={styles.timeRight}>
+          <CiLock color="#fff" size={50} />
+        </div>
+        <div className={styles.timeLeft}>
+          <h3>Fechamento</h3>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              value={closedHour}
+              onChange={(e) => setClosedHour(e)}
+              ampm={false}
+              className={styles.bgClock}
+              disabled={disabled}
+            />
+          </LocalizationProvider>
+        </div>
+      </div>
+    </div>
 
 
   return (
@@ -326,7 +364,30 @@ export default function Profile() {
           <div className={styles.menuTime}>
             <h2>Horário de Abertura e Fechamento</h2>
             <div className={styles.timesDiv}>
-              <div className={styles.divHours}>
+              <div className={styles.weekDaysCheck}>
+                {servicesDays.map((day) => {
+                  const dayName = day.name
+                  return <button className={day.checked ? styles.containerCheckbox : styles.containerCheckboxDisable}
+                    onClick={(e) => {
+                      const changeDay = servicesDays.map((day) => {
+                        e.preventDefault()
+                        if (day.name === dayName) {
+                          return { ...day, checked: !day.checked }
+                        }
+                        return { ...day, checked: false }
+                      })
+                      setServicesDays(changeDay)
+                      setselectedDay(day.name)
+                    }}>
+                    <label htmlFor="dom">{day.name}</label>
+                  </button>
+                })
+                }
+              </div>
+
+              {setDate(selectedDay)}
+            </div>
+            {/* <div className={styles.divHours}>
                 <div className={styles.time}>
                   <div className={styles.timeRight}>
                     <CiUnlock color="#fff" size={50} />
@@ -361,42 +422,7 @@ export default function Profile() {
                     </LocalizationProvider>
                   </div>
                 </div>
-              </div>
-              <h3 className={styles.weekDaysText}>Dias úteis</h3>
-              <div className={styles.weekDaysCheck}>
-                <ModalScheduleCompany>
-                  <div className={styles.containerCheckbox}>
-                    <label htmlFor="dom">Dom</label>
-                    <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} />
-                  </div>
-                </ModalScheduleCompany>
-
-                <div className={styles.containerCheckbox}>
-                  <label htmlFor="seg">Seg</label>
-                  <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} />
-                </div>
-                <div className={styles.containerCheckbox}>
-                  <label htmlFor="ter">Ter</label>
-                  <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} />
-                </div>
-                <div className={styles.containerCheckbox}>
-                  <label htmlFor="qua">Qua</label>
-                  <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} />
-                </div>
-                <div className={styles.containerCheckbox}>
-                  <label htmlFor="qui">Qui</label>
-                  <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} />
-                </div>
-                <div className={styles.containerCheckbox}>
-                  <label htmlFor="sex">Sex</label>
-                  <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} />
-                </div>
-                <div className={styles.containerCheckbox}>
-                  <label htmlFor="sab">Sab</label>
-                  <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} />
-                </div>
-              </div>
-            </div>
+              </div> */}
           </div>
           {disabled ?
             ''
