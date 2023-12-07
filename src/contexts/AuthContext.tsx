@@ -4,7 +4,7 @@ import Router from "next/router";
 import { api } from "@/services/apiClient";
 import { toast } from "react-toastify";
 import { firebase, auth } from "@/services/firebase";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 
 type AuthContextData = {
@@ -43,7 +43,7 @@ type UserProps = {
     address?: string,
     avatar_url?: string,
     banner_url?: string,
-    opening_time?: string,
+    opening_time?:  string,
     closing_time?: string,
     description?: string
 }

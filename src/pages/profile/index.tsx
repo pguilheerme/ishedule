@@ -8,7 +8,7 @@ import { BsPlusLg } from "react-icons/bs";
 import { CiLock, CiUnlock } from "react-icons/ci";
 import { ServiceCard } from "../../components/ServiceCard";
 import pencil from '../../../public/pencilWhite.svg'
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers';
@@ -36,6 +36,14 @@ type PropsDataCompany = {
   }
 }
 
+type PropsDayData = {
+  name: string;
+  selected: boolean;
+  closing_time: string;
+  opening_time: string;
+}
+
+
 export default function Profile() {
   const { user } = useContext(AuthContext)
   const { getDataCompany } = useContext(AuthContext)
@@ -44,6 +52,7 @@ export default function Profile() {
   const handleCloseModal = () => setOpenModal(false)
   const [openHour, setOpenHour] = useState<string>();
   const [closedHour, setClosedHour] = useState<string>();
+  const [value, setValue] = useState<Dayjs | null>(dayjs('2022-04-17T15:30'));
 
   const [bannerUrl, setBannerUrl] = useState('');
   const [imageBanner, setImageBanner] = useState(null);
@@ -51,15 +60,16 @@ export default function Profile() {
   const [imageAvatar, setImageAvatar] = useState(null);
   const [companyName, setCompanyName] = useState<string>();
   const [companyAddress, setCompanyAddress] = useState<string>();
-  const [selectedDay, setselectedDay] = useState<string>('dom');
 
   const [categories, setCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState("");
 
   const [services, setServices] = useState([]);
-  const [servicesDays, setServicesDays] = useState([{ name: "dom", checked: false }, { name: "seg", checked: false }, { name: "ter", checked: false }, { name: "qua", checked: false }, { name: "qui", checked: false }, { name: "sex", checked: false }, { name: "sab", checked: false }]);
+  const [servicesDays, setServicesDays] = useState([{ name: "dom", selected: false }, { name: "seg", selected: false }, { name: "ter", selected: false }, { name: "qua", selected: false }, { name: "qui", selected: false }, { name: "sex", selected: false }, { name: "sab", selected: false }]);
   const [disabled, setDisabled] = useState(true)
-  const [checked, setChecked] = useState(false)
+  const [selected, setSelected] = useState(false)
+  const [selectedDay, setselectedDay] = useState<string>('dom');
+  const [weekDays, setWeekDays] = useState([{ name: "dom", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "seg", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "ter", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "qua", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "qui", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "sex", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "sab", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }])
 
   useEffect(() => {
     setCompanyName(user.company_name)
@@ -168,6 +178,8 @@ export default function Profile() {
         banner_url = await uploadCompanyBanner(imageBanner)
       }
 
+
+
       const response = await api.patch('/user/company', {
         company_name: companyName,
         address: companyAddress,
@@ -192,44 +204,93 @@ export default function Profile() {
 
   }
 
-  const setDate = ({}) =>
-    <div>
-      <div className={styles.time}>
-        <div className={styles.timeRight}>
-          <CiUnlock color="#fff" size={50} />
-        </div>
-        <div className={styles.timeLeft}>
-          <h3>Abertura</h3>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={openHour}
-              onChange={(e) => setOpenHour(e)}
-              ampm={false}
-              className={styles.bgClock}
-              disabled={disabled}
-            />
-          </LocalizationProvider>
-        </div>
-      </div>
-      <div className={styles.time}>
-        <div className={styles.timeRight}>
-          <CiLock color="#fff" size={50} />
-        </div>
-        <div className={styles.timeLeft}>
-          <h3>Fechamento</h3>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={closedHour}
-              onChange={(e) => setClosedHour(e)}
-              ampm={false}
-              className={styles.bgClock}
-              disabled={disabled}
-            />
-          </LocalizationProvider>
-        </div>
-      </div>
-    </div>
+  const setDate = (name: string) => {
+    const day = weekDays.find((param) => param.name === name)
 
+    return (
+      <>
+        <div className={styles.checkboxCompany}>
+          <p>Funciona</p>
+          <Checkbox
+          value={day.checked}
+          onChange={(e) => {
+            const checkedDay = weekDays.map((param) => {
+              if (param.name === name ) {
+                console.log(!param.checked);
+                return {
+                  ...param ,
+                  checked: !param.checked
+                }
+              }
+              return param              
+            })
+            setWeekDays(checkedDay)
+          }}
+          />
+        </div>
+        <div className={styles.useHour}>
+          <div className={styles.time}>
+            <div className={styles.timeRight}>
+              <CiUnlock color="#fff" size={50} />
+            </div>
+            <div className={styles.timeLeft}>
+              <h3>Abertura</h3>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  value={day.opening_time}
+                  onChange={(e) => {
+                    const newOpeningTime = weekDays.map((param) => {
+                      if (param.name === name) {
+                        return {
+                          ...param,
+                          opening_time: e
+                        }
+                      }
+                      return param
+                    })
+                    setWeekDays(newOpeningTime)
+                  }
+                  }
+                  className={styles.bgClock}
+                  ampm={false}
+                  disabled={disabled}
+                />
+              </LocalizationProvider>
+            </div>
+          </div>
+          <div className={styles.time}>
+            <div className={styles.timeRight}>
+              <CiLock color="#fff" size={50} />
+            </div>
+            <div className={styles.timeLeft}>
+              <h3>Fechamento</h3>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  value={day.closing_time}
+                  onChange={(e) => {
+                    const newClosingTime = weekDays.map((param) => {
+                      if (param.name === name) {
+                        return {
+                          ...param,
+                          closing_time: e
+                        }
+                      }
+                      return param
+                    })
+                    setWeekDays(newClosingTime)
+                  }}
+                  ampm={false}
+                  className={styles.bgClock}
+                  disabled={disabled}
+                />
+              </LocalizationProvider>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+
+  }
 
   return (
     <>
@@ -239,13 +300,6 @@ export default function Profile() {
       <div className={!disabled ? styles.bodyActive : styles.body}>
 
         <div className={styles.containerCenter}>
-          {/* {disabled ?
-          ""
-        :
-        <div className={styles.DownArrow}>
-          <button className={styles.btnDownArrow}><FaChevronDown color= {'#e83f5b'} size={30}/></button> 
-        </div>
-      } */}
           <div className={styles.btnEditProfile}>
             <button className={disabled ? styles.btnEdit : styles.btnEditDisabled} onClick={buttonEditProfile}><Image src={pencil} height={25} width={25} alt="pencil" className={styles.imgEditProfile} /></button>
           </div>
@@ -270,7 +324,6 @@ export default function Profile() {
                 onChange={handleBannerFile}
                 disabled={disabled}
               />
-
 
               {bannerUrl && (
                 <Image
@@ -367,62 +420,27 @@ export default function Profile() {
               <div className={styles.weekDaysCheck}>
                 {servicesDays.map((day) => {
                   const dayName = day.name
-                  return <button className={day.checked ? styles.containerCheckbox : styles.containerCheckboxDisable}
+                  return <button className={day.selected ? styles.containerCheckbox : styles.containerCheckboxDisable}
                     onClick={(e) => {
                       const changeDay = servicesDays.map((day) => {
                         e.preventDefault()
                         if (day.name === dayName) {
-                          return { ...day, checked: !day.checked }
+                          return { ...day, selected: true }
                         }
-                        return { ...day, checked: false }
+                        return { ...day, selected: false }
                       })
                       setServicesDays(changeDay)
+
                       setselectedDay(day.name)
                     }}>
-                    <label htmlFor="dom">{day.name}</label>
+                    <label htmlFor="dom">{day.name} </label>
                   </button>
+
                 })
                 }
               </div>
-
               {setDate(selectedDay)}
             </div>
-            {/* <div className={styles.divHours}>
-                <div className={styles.time}>
-                  <div className={styles.timeRight}>
-                    <CiUnlock color="#fff" size={50} />
-                  </div>
-                  <div className={styles.timeLeft}>
-                    <h3>Abertura</h3>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <TimePicker
-                        value={openHour}
-                        onChange={(e) => setOpenHour(e)}
-                        ampm={false}
-                        className={styles.bgClock}
-                        disabled={disabled}
-                      />
-                    </LocalizationProvider>
-                  </div>
-                </div>
-                <div className={styles.time}>
-                  <div className={styles.timeRight}>
-                    <CiLock color="#fff" size={50} />
-                  </div>
-                  <div className={styles.timeLeft}>
-                    <h3>Fechamento</h3>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <TimePicker
-                        value={closedHour}
-                        onChange={(e) => setClosedHour(e)}
-                        ampm={false}
-                        className={styles.bgClock}
-                        disabled={disabled}
-                      />
-                    </LocalizationProvider>
-                  </div>
-                </div>
-              </div> */}
           </div>
           {disabled ?
             ''
