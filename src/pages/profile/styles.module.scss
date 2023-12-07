@@ -229,7 +229,6 @@
     width: 40rem;
     border-radius: 1rem;
     flex-direction: column;
-    gap: 1rem;
 
     .time {
       display: flex;
@@ -461,4 +460,17 @@
   align-items: center;
   justify-content: center;
   flex-direction: row;
+}
+
+.checkboxCompany {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+
+  p {
+    color: white;
+    font-size: 1.2em;
+    font-weight: 600;
+  }
 }
