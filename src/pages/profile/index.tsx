@@ -23,6 +23,9 @@ import { getDownloadURL } from "firebase/storage";
 import { firebase } from '../../services/firebase'
 import { toast } from "react-toastify";
 import Checkbox from '@mui/material/Checkbox';
+import { FaRegCheckSquare } from "react-icons/fa";
+import { FaRegSquare } from "react-icons/fa";
+
 
 
 type PropsDataCompany = {
@@ -179,12 +182,12 @@ export default function Profile() {
       }
 
 
-
       const response = await api.patch('/user/company', {
         company_name: companyName,
         address: companyAddress,
         avatar_url: avatar_url,
         banner_url: banner_url,
+        checked: value,
         closing_time: String(closedHour),
         opening_time: String(openHour)
       }, {
@@ -193,6 +196,7 @@ export default function Profile() {
         }
       }
       )
+
 
       getDataCompany()
     } catch (error) {
@@ -205,28 +209,32 @@ export default function Profile() {
   }
 
   const setDate = (name: string) => {
-    const day = weekDays.find((param) => param.name === name)
+    const day = weekDays.find((param) => param.name === name)  
 
     return (
       <>
         <div className={styles.checkboxCompany}>
-          <p>Funciona</p>
-          <Checkbox
-          value={day.checked}
-          onChange={(e) => {
+          <p className={ disabled ? styles.textNotChecked : styles.textChecked }>Funciona</p>
+          <button
+          onClick={() => {
             const checkedDay = weekDays.map((param) => {
               if (param.name === name ) {
-                console.log(!param.checked);
+                
                 return {
                   ...param ,
                   checked: !param.checked
                 }
               }
-              return param              
+              return param           
             })
+            console.log( "Console do if:",checkedDay);
             setWeekDays(checkedDay)
           }}
-          />
+          disabled = {disabled}
+          className={styles. btnChecked}
+          >
+            { day.checked ? <FaRegCheckSquare size= {25} /> : <FaRegSquare size= {25} />}
+          </button>
         </div>
         <div className={styles.useHour}>
           <div className={styles.time}>
@@ -249,8 +257,7 @@ export default function Profile() {
                       return param
                     })
                     setWeekDays(newOpeningTime)
-                  }
-                  }
+                  }}
                   className={styles.bgClock}
                   ampm={false}
                   disabled={disabled}

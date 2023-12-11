@@ -10,6 +10,12 @@ function Header() {
   const [focus, setFocus] = useState('');
   const router = useRouter();
 
+  useEffect(() => {
+    router.push("/dashboard");
+    setFocus("dashboard");
+  }, []);
+
+
   return (
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>

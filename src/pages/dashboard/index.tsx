@@ -225,7 +225,7 @@ export default function Dashboard() {
                 user?.professionals.map((e, key) => {
                   return (
                     <>
-                      <p>- {e.name}</p>
+                      <p key={key}>- {e.name}</p>
                     </>
                   );
                 })
