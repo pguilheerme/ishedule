@@ -467,10 +467,28 @@
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  gap: .5rem;
+
+  .textChecked {
+    color: #fff;
+  }
+
+  .textNotChecked {
+    color: #A8A8A8;
+  }
+
+  .btnChecked {
+    color: #fff;
+
+    &:disabled {
+      color: var(--gray-400);
+    }
+  }
 
   p {
     color: white;
     font-size: 1.2em;
     font-weight: 600;
   }
+
 }

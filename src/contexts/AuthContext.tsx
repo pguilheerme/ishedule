@@ -43,6 +43,7 @@ type UserProps = {
     address?: string,
     avatar_url?: string,
     banner_url?: string,
+    checkedDays?: boolean,
     opening_time?:  string,
     closing_time?: string,
     description?: string
@@ -85,6 +86,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         address: "",
         avatar_url: "",
         banner_url: "",
+        checkedDays: false,
         closing_time: "",
         opening_time: "",
         description: "",
