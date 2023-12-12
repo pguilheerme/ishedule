@@ -27,7 +27,6 @@ import { FaRegCheckSquare } from "react-icons/fa";
 import { FaRegSquare } from "react-icons/fa";
 
 
-
 type PropsDataCompany = {
   company?: {
     company_name: string;

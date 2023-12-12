@@ -9,11 +9,15 @@ import { canSSRAuth } from "@/utils/canSSRAuth";
 import { setupAPIClient } from "@/services/api";
 import { AuthContext } from "@/contexts/AuthContext";
 import noFunc from '../../../public/noFunc.svg'
+import { ModalScheduleProfessionals } from "@/components/ModalScheduleProfessionals";
 
 export default function Workers() {
     const [openModal, setOpenModal] = useState(false)
     const handleCloseModal = () => setOpenModal(false)
     const { user } = useContext(AuthContext)
+
+    const [openSchedule, setOpenSchedule] = useState(false)
+    const handleCloseSchedule = () => setOpenSchedule(false)
 
     return (
             <>
@@ -26,6 +30,9 @@ export default function Workers() {
                         <button className={styles.btnNew} onClick={() => setOpenModal(true)}>
                             Novo
                             <Image src={plus} alt="plus" width={20} />
+                        </button>
+                        <button className={styles.btnNew} onClick={() => setOpenSchedule(true)}>
+                            Teste
                         </button>
                     </div>
                     {user?.professionals.length != 0 ?
@@ -41,6 +48,7 @@ export default function Workers() {
                     }
                 </div>
 
+                <ModalScheduleProfessionals open={openSchedule} onClose={handleCloseSchedule} />
                 <BasicModal open={openModal} onClose={handleCloseModal} />
             </>
     )
