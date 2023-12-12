@@ -181,15 +181,22 @@ export default function Profile() {
         banner_url = await uploadCompanyBanner(imageBanner)
       }
 
+      const getScheduleCompany = await api.get('/user/company/schedule', 
+        {
+          headers : {
+            "Authorization" : `Bearer ${token}`
+          }
+        }
+      )
 
       const response = await api.patch('/user/company', {
         company_name: companyName,
         address: companyAddress,
         avatar_url: avatar_url,
         banner_url: banner_url,
-        checked: value,
-        closing_time: String(closedHour),
-        opening_time: String(openHour)
+        // checked: value,
+        // closing_time: String(closedHour),
+        // opening_time: String(openHour)
       }, {
         headers: {
           "Authorization": `Bearer ${token}`
@@ -197,6 +204,8 @@ export default function Profile() {
       }
       )
 
+      console.log("Console do get",getScheduleCompany);
+      
 
       getDataCompany()
     } catch (error) {
