@@ -210,7 +210,6 @@ export default function Profile() {
 
   const setDate = (name: string) => {
     const day = weekDays.find((param) => param.name === name)  
-
     return (
       <>
         <div className={styles.checkboxCompany}>
@@ -218,8 +217,7 @@ export default function Profile() {
           <button
           onClick={() => {
             const checkedDay = weekDays.map((param) => {
-              if (param.name === name ) {
-                
+              if (param.name === name ) {            
                 return {
                   ...param ,
                   checked: !param.checked
