@@ -62,11 +62,13 @@
       .inputName {
         font-size: 25px;
         font-weight: bold;
+        color: var(--other-red);
       }
-
+      
       .inputAdress {
         font-size: 15px;
         font-weight: bold;
+        color: var(--other-red);
       }
     }
   }
@@ -261,6 +263,11 @@
         input {
           color: white !important;
           font-weight: 700;
+          cursor: pointer;
+
+          &:disabled {
+            cursor: no-drop;
+          }
         }
       }
     }
@@ -428,6 +435,7 @@
     
     label {
       color: var(--gray-400);
+      cursor: pointer;
     }
 
     :hover {
@@ -482,6 +490,7 @@
 
     &:disabled {
       color: var(--gray-400);
+      cursor: no-drop;
     }
   }
 
