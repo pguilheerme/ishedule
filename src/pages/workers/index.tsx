@@ -31,9 +31,6 @@ export default function Workers() {
                             Novo
                             <Image src={plus} alt="plus" width={20} />
                         </button>
-                        <button className={styles.btnNew} onClick={() => setOpenSchedule(true)}>
-                            Teste
-                        </button>
                     </div>
                     {user?.professionals.length != 0 ?
                         user?.professionals.map((e, key) => {return(
@@ -48,7 +45,6 @@ export default function Workers() {
                     }
                 </div>
 
-                <ModalScheduleProfessionals open={openSchedule} onClose={handleCloseSchedule} />
                 <BasicModal open={openModal} onClose={handleCloseModal} />
             </>
     )

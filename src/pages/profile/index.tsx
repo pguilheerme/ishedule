@@ -15,7 +15,7 @@ import { TimePicker } from '@mui/x-date-pickers';
 import { setupAPIClient } from "@/services/api";
 import { canSSRAuth } from "@/utils/canSSRAuth";
 import { ModalService } from "@/components/ModalService";
-import { AuthContext } from "@/contexts/AuthContext";
+import { AuthContext, ScheduleProps } from "@/contexts/AuthContext";
 import { api } from "@/services/apiClient";
 import { parseCookies } from "nookies";
 import { FaChevronDown } from "react-icons/fa";
@@ -47,7 +47,7 @@ type PropsDayData = {
 
 
 export default function Profile() {
-  const { user } = useContext(AuthContext)
+  const { user, schedule } = useContext(AuthContext)
   const { getDataCompany } = useContext(AuthContext)
   const { '@firebase.token': token } = parseCookies()
   const [openModal, setOpenModal] = useState(false)
@@ -69,19 +69,31 @@ export default function Profile() {
   const [services, setServices] = useState([]);
   const [servicesDays, setServicesDays] = useState([{ name: "dom", selected: false }, { name: "seg", selected: false }, { name: "ter", selected: false }, { name: "qua", selected: false }, { name: "qui", selected: false }, { name: "sex", selected: false }, { name: "sab", selected: false }]);
   const [disabled, setDisabled] = useState(true)
-  const [selected, setSelected] = useState(false)
   const [selectedDay, setselectedDay] = useState<string>('dom');
-  const [weekDays, setWeekDays] = useState([{ name: "dom", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "seg", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "ter", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "qua", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "qui", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "sex", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }, { name: "sab", checked: false, opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()) }])
+  const [weekDays, setWeekDays] = useState<ScheduleProps[]>([
+    { name: "dom", opening_time: new Date(), closing_time: new Date(), checked: false },
+    { name: "seg", opening_time: new Date(), closing_time: new Date(), checked: false },
+    { name: "ter", opening_time: new Date(), closing_time: new Date(), checked: false },
+    { name: "qua", opening_time: new Date(), closing_time: new Date(), checked: false },
+    { name: "qui", opening_time: new Date(), closing_time: new Date(), checked: false },
+    { name: "sex", opening_time: new Date(), closing_time: new Date(), checked: false },
+    { name: "sab", opening_time: new Date(), closing_time: new Date(), checked: false }
+  ])
+
+  console.log(weekDays);
+  
 
   useEffect(() => {
     setCompanyName(user.company_name)
     setCompanyAddress(user.address)
     setAvatarUrl(user.avatar_url)
     setBannerUrl(user.banner_url)
-    setClosedHour(user.closing_time)
-    setOpenHour(user.opening_time)
 
-  }, [user])
+    if(schedule) {
+      setWeekDays(schedule)
+    }
+
+  }, [user, schedule])
 
   const itens = [
     user?.service.map((e, key) =>
@@ -180,33 +192,40 @@ export default function Profile() {
         banner_url = await uploadCompanyBanner(imageBanner)
       }
 
-      const getScheduleCompany = await api.get('/user/company/schedule', 
-        {
-          headers : {
-            "Authorization" : `Bearer ${token}`
-          }
+      const getScheduleCompany = await api.get('/user/company/schedule', {
+        headers: {
+          "Authorization": `Bearer ${token}`
         }
-      )
+      })
 
-      const response = await api.patch('/user/company', {
+      const data_company = await api.patch('/user/company', {
         company_name: companyName,
         address: companyAddress,
         avatar_url: avatar_url,
         banner_url: banner_url,
-        // checked: value,
-        // closing_time: String(closedHour),
-        // opening_time: String(openHour)
       }, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
-      }
+      })
+
+      const data_schedule = await api.patch('/user/company/schedule', 
+        weekDays,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
       )
+
+      console.log(data_schedule);
+      
 
       console.log("Console do get",getScheduleCompany);
       
-
+      setWeekDays(JSON.parse(data_schedule.data.schedule))
       getDataCompany()
+
     } catch (error) {
       console.log(error)
     }
@@ -217,7 +236,11 @@ export default function Profile() {
   }
 
   const setDate = (name: string) => {
-    const day = weekDays.find((param) => param.name === name)  
+    if(!weekDays) {
+      return 
+    }
+    
+    const day = weekDays.find((param) => param.name === name) 
     return (
       <>
         <div className={styles.checkboxCompany}>
@@ -322,7 +345,7 @@ export default function Profile() {
 
                 disabled ? '' :
                   <label htmlFor="inpBanner">
-                    <Image src={pencil} alt="Camera add icon" width={60} className={styles.image} />
+                    <Image src={pencil} alt="Camera add icon" width={60} className={styles.image}  />
                   </label>
                 :
                 <label htmlFor="inpBanner">
@@ -448,11 +471,10 @@ export default function Profile() {
                     }}>
                     <label htmlFor="dom">{day.name} </label>
                   </button>
-
                 })
                 }
               </div>
-              {setDate(selectedDay)}
+                 { schedule !== undefined && setDate(selectedDay) }
             </div>
           </div>
           {disabled ?
@@ -460,7 +482,7 @@ export default function Profile() {
             :
             <div className={styles.btnProfileChanges}>
               <button className={styles.btnCancel} onClick={() => setDisabled(true)}>Cancelar</button>
-              <button className={styles.btnConfirm} onClick={(e) => handleSaveCompanyData(e)}>Salvar alterações</button>
+              <button className={styles.btnConfirm} onClick={(e) => handleSaveCompanyData(e)  }>Salvar alterações</button>
             </div>
           }
         </div>

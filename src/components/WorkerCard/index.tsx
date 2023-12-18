@@ -5,11 +5,14 @@ import userShape from "../../../public/userShape.png";
 import { LuCalendarClock, LuPencil, LuTrash2 } from "react-icons/lu";
 import { BasicModal } from "../Modal";
 import { DraggableDialog } from "../Dialog";
+import { ModalScheduleProfessionals } from "../ModalScheduleProfessionals";
 
 export function WorkerCard({ avatar, name, role, func}) {
   const [editModal, setEditModal] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
+  const [openSchedule, setOpenSchedule] = useState(false)
+  const handleCloseSchedule = () => setOpenSchedule(false)
   const handleOpenDialog = () => setOpenDialog(true)
   const handleCloseDialog = () => setOpenDialog(false)
   const handleCloseModal = () => setOpenModal(false)
@@ -46,13 +49,14 @@ export function WorkerCard({ avatar, name, role, func}) {
       </div>
 
       <div className={styles.workerActions}>
-        <button className={styles.btnActions}><LuCalendarClock color="#2F317C" size={25} cursor="pointer"/></button>
+        <button className={styles.btnActions} onClick={() => setOpenSchedule(true)}><LuCalendarClock color="#2F317C" size={25} cursor="pointer"/></button>
         <button onClick={() => handleOpenModal(true)}  className={styles.btnActions}><LuPencil color="#2F317C" size={25} cursor="pointer"/></button>
         <button className={styles.btnActions} onClick={handleOpenDialog}><LuTrash2 color="#e83f5b" size={25} cursor="pointer" /></button>
       </div>
     </div>
         <BasicModal open={openModal} onClose={handleCloseModal} edit={editModal} func={func} />
         <DraggableDialog open={openDialog} onClose={handleCloseDialog} id={func.id}/>
+        <ModalScheduleProfessionals open={openSchedule} onClose={handleCloseSchedule} id={func.id} />
     </>
   )
 }
