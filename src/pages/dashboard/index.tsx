@@ -109,7 +109,7 @@ export default function Dashboard() {
     
     setCountFunc(funcToday)
     handleFormatDate(today);
-  }, []);
+  }, [user]);
 
   function handleFormatDate(day) {
     setDate(day);
