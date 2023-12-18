@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import styles from "./styles.module.scss";
 import Image from "next/image";
@@ -18,32 +18,12 @@ import { ModalService } from "@/components/ModalService";
 import { AuthContext, ScheduleProps } from "@/contexts/AuthContext";
 import { api } from "@/services/apiClient";
 import { parseCookies } from "nookies";
-import { FaChevronDown } from "react-icons/fa";
 import { getDownloadURL } from "firebase/storage";
 import { firebase } from '../../services/firebase'
-import { toast } from "react-toastify";
-import Checkbox from '@mui/material/Checkbox';
 import { FaRegCheckSquare } from "react-icons/fa";
 import { FaRegSquare } from "react-icons/fa";
+import { toast } from "react-toastify";
 
-
-type PropsDataCompany = {
-  company?: {
-    company_name: string;
-    address: string;
-    banner_url: string;
-    avatar_url: string;
-    opening_time: string;
-    closing_time: string;
-  }
-}
-
-type PropsDayData = {
-  name: string;
-  selected: boolean;
-  closing_time: string;
-  opening_time: string;
-}
 
 
 export default function Profile() {
@@ -52,9 +32,6 @@ export default function Profile() {
   const { '@firebase.token': token } = parseCookies()
   const [openModal, setOpenModal] = useState(false)
   const handleCloseModal = () => setOpenModal(false)
-  const [openHour, setOpenHour] = useState<string>();
-  const [closedHour, setClosedHour] = useState<string>();
-  const [value, setValue] = useState<Dayjs | null>(dayjs('2022-04-17T15:30'));
 
   const [bannerUrl, setBannerUrl] = useState('');
   const [imageBanner, setImageBanner] = useState(null);
@@ -67,17 +44,17 @@ export default function Profile() {
   const [categorySelected, setCategorySelected] = useState("");
 
   const [services, setServices] = useState([]);
-  const [servicesDays, setServicesDays] = useState([{ name: "dom", selected: false }, { name: "seg", selected: false }, { name: "ter", selected: false }, { name: "qua", selected: false }, { name: "qui", selected: false }, { name: "sex", selected: false }, { name: "sab", selected: false }]);
+  const [servicesDays, setServicesDays] = useState([{ name: "dom", selected: true }, { name: "seg", selected: false }, { name: "ter", selected: false }, { name: "qua", selected: false }, { name: "qui", selected: false }, { name: "sex", selected: false }, { name: "sab", selected: false }]);
   const [disabled, setDisabled] = useState(true)
   const [selectedDay, setselectedDay] = useState<string>('dom');
   const [weekDays, setWeekDays] = useState<ScheduleProps[]>([
-    { name: "dom", opening_time: new Date(), closing_time: new Date(), checked: false },
-    { name: "seg", opening_time: new Date(), closing_time: new Date(), checked: false },
-    { name: "ter", opening_time: new Date(), closing_time: new Date(), checked: false },
-    { name: "qua", opening_time: new Date(), closing_time: new Date(), checked: false },
-    { name: "qui", opening_time: new Date(), closing_time: new Date(), checked: false },
-    { name: "sex", opening_time: new Date(), closing_time: new Date(), checked: false },
-    { name: "sab", opening_time: new Date(), closing_time: new Date(), checked: false }
+    { name: "dom", opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()), checked: false },
+    { name: "seg", opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()), checked: false },
+    { name: "ter", opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()), checked: false },
+    { name: "qua", opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()), checked: false },
+    { name: "qui", opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()), checked: false },
+    { name: "sex", opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()), checked: false },
+    { name: "sab", opening_time: dayjs(Date.now()), closing_time: dayjs(Date.now()), checked: false }
   ])
 
   console.log(weekDays);
@@ -90,7 +67,12 @@ export default function Profile() {
     setBannerUrl(user.banner_url)
 
     if(schedule) {
-      setWeekDays(schedule)
+      const current_schedule = schedule.map((day) => {    
+        return {...day, opening_time:dayjs(day.opening_time), closing_time: dayjs(day.closing_time)}
+      })
+      setWeekDays(current_schedule)
+      console.log(current_schedule);
+      
     }
 
   }, [user, schedule])
@@ -174,7 +156,7 @@ export default function Profile() {
   function handleChangeCategory(e) {
     setCategorySelected(e.target.value);
   }
-
+ 
   function buttonEditProfile() {
     setDisabled(false)
   }
@@ -192,39 +174,21 @@ export default function Profile() {
         banner_url = await uploadCompanyBanner(imageBanner)
       }
 
-      const getScheduleCompany = await api.get('/user/company/schedule', {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-
       const data_company = await api.patch('/user/company', {
         company_name: companyName,
         address: companyAddress,
         avatar_url: avatar_url,
         banner_url: banner_url,
+        schedule : weekDays
       }, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
-      })
-
-      const data_schedule = await api.patch('/user/company/schedule', 
-        weekDays,
-        {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        }
-      )
-
-      console.log(data_schedule);
+      })            
       
-
-      console.log("Console do get",getScheduleCompany);
-      
-      setWeekDays(JSON.parse(data_schedule.data.schedule))
+      setWeekDays(data_company.data.schedule)
       getDataCompany()
+      toast.success("Perfil atualizado com sucesso")
 
     } catch (error) {
       console.log(error)
@@ -256,7 +220,6 @@ export default function Profile() {
               }
               return param           
             })
-            console.log( "Console do if:",checkedDay);
             setWeekDays(checkedDay)
           }}
           disabled = {disabled}
@@ -286,7 +249,8 @@ export default function Profile() {
                       return param
                     })
                     setWeekDays(newOpeningTime)
-                  }}
+                  }
+                }
                   className={styles.bgClock}
                   ampm={false}
                   disabled={disabled}
@@ -340,12 +304,12 @@ export default function Profile() {
             <button className={disabled ? styles.btnEdit : styles.btnEditDisabled} onClick={buttonEditProfile}><Image src={pencil} height={25} width={25} alt="pencil" className={styles.imgEditProfile} /></button>
           </div>
           <div className={styles.headerProfile}>
-            <div className={bannerUrl ? styles.editBanner : styles.labelBanner}>
+            <div style={{position: 'relative'}} className={bannerUrl ? styles.editBanner : styles.labelBanner}>
               {bannerUrl ?
 
                 disabled ? '' :
                   <label htmlFor="inpBanner">
-                    <Image src={pencil} alt="Camera add icon" width={60} className={styles.image}  />
+                    <Image src={pencil} alt="Camera add icon" width={60} className={styles.image} />
                   </label>
                 :
                 <label htmlFor="inpBanner">
@@ -365,9 +329,8 @@ export default function Profile() {
                 <Image
                   src={bannerUrl}
                   alt="Banner da loja"
-                  width={250}
-                  height={250}
                   className={styles.bannerPreview}
+                  fill
                 />
               )}
             </div>
@@ -448,7 +411,7 @@ export default function Profile() {
                 <p>não há serviços</p>
               </div>
             }
-
+  
           </div>
           <div className={styles.menuTime}>
             <h2>Horário de Abertura e Fechamento</h2>

@@ -171,7 +171,7 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
                 </div>
                 <div className={styles.containerForm}>
                     <form>
-                        <div className={serviceUrl ? styles.editBanner : styles.labelBanner}>
+                        <div style={{position: 'relative'}} className={serviceUrl ? styles.editBanner : styles.labelBanner}>
                             <label htmlFor="inpServiceAvatar">
                                 <Image src={serviceUrl ? pencil : cameraAdd} alt="Camera add icon" width={20} className={styles.image} />
                             </label>
@@ -187,8 +187,11 @@ export function ModalService({ open, onClose, edit = false, service }: propsModa
                                 <Image
                                     src={serviceUrl}
                                     alt="Foto do serviço"
-                                    width={50}
-                                    height={50}
+                                    // width={50}
+                                    // height={50}
+                                    sizes="(min-width: 808px) 50vw, 100vw"
+
+                                    fill
                                     className={styles.bannerPreview}
                                 />
                             )}
