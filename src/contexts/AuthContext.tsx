@@ -37,8 +37,8 @@ type ServiceProps = {
 export type ScheduleProps = {
     name: string,
     checked: boolean,
-    opening_time: Date,
-    closing_time: Date
+    opening_time: Date | Dayjs | string | undefined | null ,
+    closing_time: Date | Dayjs | string | undefined | null
 }
 
 type UserProps = {
@@ -129,9 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 }
             })
             .then(({data}) => {
-                setSchedule(JSON.parse(data.schedule))
-                
-                console.log(JSON.parse(data.schedule));
+                setSchedule(data.schedule)
                 
             })
         }
