@@ -39,7 +39,7 @@ export function ModalScheduleProfessionals({
 
   const [services, setServices] = useState([]);
   const [servicesDays, setServicesDays] = useState([
-    { name: "dom", selected: false },
+    { name: "dom", selected: true },
     { name: "seg", selected: false },
     { name: "ter", selected: false },
     { name: "qua", selected: false },

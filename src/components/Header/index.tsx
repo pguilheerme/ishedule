@@ -20,7 +20,7 @@ function Header() {
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>
         <Link href="/dashboard">
-          <Image src={logoImg} alt="logo ishedule" />
+          <Image src={logoImg} alt="logo ishedule" priority />
         </Link>
 
         <nav className={styles.navMenu}>
