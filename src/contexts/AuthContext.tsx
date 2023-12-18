@@ -9,6 +9,7 @@ import dayjs, { Dayjs } from "dayjs";
 
 type AuthContextData = {
     user?: UserProps,
+    schedule: ScheduleProps[],
     isAuthenticated?: boolean,
     signInWithEmailAndPassword: (credentials: SignInProps) => Promise<void>
     signOut: () => void,
@@ -33,6 +34,13 @@ type ServiceProps = {
     estimated_time: string
 }
 
+export type ScheduleProps = {
+    name: string,
+    checked: boolean,
+    opening_time: Date,
+    closing_time: Date
+}
+
 type UserProps = {
     id: string,
     name?: string,
@@ -43,9 +51,7 @@ type UserProps = {
     address?: string,
     avatar_url?: string,
     banner_url?: string,
-    checkedDays?: boolean,
-    opening_time?:  string,
-    closing_time?: string,
+    schedule?: ScheduleProps[],
     description?: string
 }
 
@@ -86,14 +92,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         address: "",
         avatar_url: "",
         banner_url: "",
-        checkedDays: false,
-        closing_time: "",
-        opening_time: "",
         description: "",
         professionals: [],
         service: []
     })
+    const [schedule, setSchedule] = useState<ScheduleProps[]>()
     const isAuthenticated = !!user
+    
 
     useEffect(() => {
         // tentar pegar algo no cookie
@@ -107,15 +112,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 headers: { 'Authorization': `Bearer ${token}` }
             }).then(response => {
                 const {data} = response
-
+                
                 setUser(data)
-
+                
             })
-                .catch((error) => {
-                    console.log(error);
- 
-                    signOut();
-                })
+            .catch((error) => {
+                console.log(error);
+                
+                signOut();
+            })
+
+
+            api.get('/user/company/schedule', {
+                headers: {
+                  "Authorization": `Bearer ${token}`
+                }
+            })
+            .then(({data}) => {
+                setSchedule(JSON.parse(data.schedule))
+                
+                console.log(JSON.parse(data.schedule));
+                
+            })
         }
     }
 
@@ -326,7 +344,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signUpWithFacebook,signUpWithGoogle, signUpWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithGoogle, signInWithFacebook, getDataCompany }}>
+        <AuthContext.Provider value={{ user, schedule , isAuthenticated, signUpWithFacebook,signUpWithGoogle, signUpWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithGoogle, signInWithFacebook, getDataCompany }}>
             {children}
         </AuthContext.Provider>
     )

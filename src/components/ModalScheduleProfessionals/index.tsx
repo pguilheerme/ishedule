@@ -16,6 +16,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { CiLock, CiUnlock } from "react-icons/ci";
 
 type PropsModalScheduleProfessionals = {
+  id: string;
   open: boolean;
   edit?: boolean;
   scheduleProfessionals?: [enter_time: string, exit_time: string, weekdays: []];
@@ -29,8 +30,8 @@ export function ModalScheduleProfessionals({
   scheduleProfessionals,
 }: PropsModalScheduleProfessionals) {
   const [companyWeekdays, setCompanyWeekdays] = useState([]);
-  const [companyOpeningTime, setCompanyOpeningTime] = useState("");
-  const [companyClosingTime, setCompanyClosingTime] = useState("");
+  const [companyEnterTime, setCompanyEnterTime] = useState("");
+  const [companyExitTime, setCompanyExitTime] = useState("");
 
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
   const [enterTime, setEnterTime] = useState("");
@@ -46,7 +47,6 @@ export function ModalScheduleProfessionals({
     { name: "sex", selected: false },
     { name: "sab", selected: false },
   ]);
-  const [disabled, setDisabled] = useState(true);
   const [selected, setSelected] = useState(false);
   const [selectedDay, setselectedDay] = useState<string>("dom");
   const [weekDays, setWeekDays] = useState([
@@ -99,8 +99,8 @@ export function ModalScheduleProfessionals({
     return (
       <>
         <div className={styles.checkboxCompany}>
-          <p className={disabled ? styles.textNotChecked : styles.textChecked}>
-            Funciona
+          <p className={ styles.textChecked}>
+            trabalha
           </p>
           <button
             onClick={() => {
@@ -115,7 +115,6 @@ export function ModalScheduleProfessionals({
               });
               setWeekDays(checkedDay);
             }}
-            disabled={disabled}
             className={styles.btnChecked}
           >
             {day.checked ? (
@@ -127,7 +126,7 @@ export function ModalScheduleProfessionals({
         </div>
         <div className={styles.useHour}>
           <div className={styles.time}>
-            <h3>Abertura</h3>
+            <h3>Entrada</h3>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <TimePicker
                 value={day.opening_time}
@@ -149,7 +148,7 @@ export function ModalScheduleProfessionals({
             </LocalizationProvider>
           </div>
           <div className={styles.time}>
-            <h3>Fechamento</h3>
+            <h3>Saída</h3>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <TimePicker
                 value={day.closing_time}

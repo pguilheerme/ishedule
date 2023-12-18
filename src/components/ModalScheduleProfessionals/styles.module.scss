@@ -123,9 +123,11 @@
 
 .time {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
+  margin-left: 1rem;
+  margin-right: 1rem;
 
   h3 {
     margin-bottom: 0.5rem;
@@ -148,10 +150,6 @@
       color: var(--dark-blue) !important;
       font-weight: 700;
       cursor: pointer;
-
-      &:disabled {
-        cursor: no-drop;
-      }
     }
   }
 }
@@ -199,6 +197,7 @@
     color: var(--dark-blue);
     font-size: 1.2rem;
     font-weight: 500;
+    margin: 0;
   }
 }
 
@@ -208,22 +207,15 @@
   justify-content: center;
   flex-direction: row;
   gap: .5rem;
+  margin-bottom: 10px;
 
   .textChecked {
     color: var(--dark-blue);
-  }
-
-  .textNotChecked {
-    color: #A8A8A8;
+    margin-bottom: 10px;
   }
 
   .btnChecked {
     color: var(--dark-blue);
-
-    &:disabled {
-      color: var(--gray-400);
-      cursor: no-drop;
-    }
   }
 
   p {
